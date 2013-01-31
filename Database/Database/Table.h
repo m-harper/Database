@@ -1,26 +1,29 @@
 #pragma once
 
-#include <list>
-#include <string>
+
 #include "Record.h"
 
-enum type {INT, FLOAT, STRING, DATE);
+enum Type {INT, FLOAT, STRING, DATE};
 
 class Table {
+
+	list<Record> records;
 public:
 	Table();
-	Table(std::list<std::string>*, std::list<type>*);
-
-	void add(std::string, type);
-	bool remove(std::string);
-	void insert(Record);
-	std::list<std::string> get_attributes();
-	unsigned get_size();
-	bool rename_attribute(std::string, std::string);
-	void specify_key(std::list<std::string>*);
-	Table cross_join(Table, Table);
-	
-
+	Table(list<string>*, list<Type>*);
 	~Table();
+
+	void addAttribute(string name, Type type);
+	bool deleteAttribute(string name);
+	void insertRecord(Record record);
+	list<string> getAttributes(); // 'returns a list of the attributes AND types...' ????
+	unsigned int getSize();
+	bool renameAttribute(string oldName, string newName);
+	Table crossJoin(Table firstTable, Table secondTable);
+	
+	float getSum(string attributeName);
+	int getCount(string attributeName);
+	float getMin(string attributeName);
+	float getMax(string attributeName);
 };
 
