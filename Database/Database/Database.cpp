@@ -6,3 +6,4 @@ Database::Database() {
 
 Database::~Database() {
 }
+
