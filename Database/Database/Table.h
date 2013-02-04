@@ -4,9 +4,7 @@
 
 enum Type {INT, FLOAT, string, DATE};
 
-class Table {
-
-	std::list<Record> records;
+class Table {	
 public:
 	Table();
 	Table(const Table &in);
@@ -25,4 +23,7 @@ public:
 	int getCount(std::string attributeName);
 	float getMin(std::string attributeName);
 	float getMax(std::string attributeName);
+
+private:
+	std::list<Record> records;
 };
