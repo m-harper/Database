@@ -9,6 +9,7 @@ class Table {
 	std::list<Record> records;
 public:
 	Table();
+	Table(const Table &in);
 	Table(std::list<std::string>*, std::list<Type>*);
 	~Table();
 
@@ -19,10 +20,9 @@ public:
 	unsigned int getSize();
 	bool renameAttribute(std::string oldName, std::string newName);
 	Table crossJoin(Table firstTable, Table secondTable);
-	
+
 	float getSum(std::string attributeName);
 	int getCount(std::string attributeName);
 	float getMin(std::string attributeName);
 	float getMax(std::string attributeName);
 };
-

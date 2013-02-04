@@ -1,10 +1,17 @@
 #pragma once
 
+#ifdef DB_EXPORTS
+#define DB_API __declspec(dllexport) 
+#else
+#define DB_API __declspec(dllimport) 
+#endif
+
 #include "Table.h"
 
-class Database {
+class DB_API Database {
 public:
 	Database();
+	Database(const Database &in);
 	~Database();
 
 	void addTable(Table table, std::string name);
