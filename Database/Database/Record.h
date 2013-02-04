@@ -2,17 +2,14 @@
 #include <list>
 #include <string>
 
-using namespace std;
-
 class Record {
 
-	list<string> tuple;
+	std::list<std::string> tuple;
 public:
 	Record();
 	~Record();
 
-	string accessRecordEntry(int entry);
-	void modifyRecordEntry(int entry, string newEntryValue);
-	string retrieveRecordEntry(int entry);
+	std::string accessRecordEntry(int entry);
+	void modifyRecordEntry(int entry, std::string newEntryValue);
+	std::string retrieveRecordEntry(int entry);
 };
-
