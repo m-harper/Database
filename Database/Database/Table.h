@@ -15,7 +15,7 @@ public:
 	void addAttribute(std::string name, Type type);
 	bool deleteAttribute(std::string name);
 	void insertRecord(Record record);
-	std::list<std::string> getAttributes(); // 'returns a std::list of the attributes AND types...' ????
+	std::list<std::string>* getAttributes(); // 'returns a std::list of the attributes AND types...' ????
 	unsigned int getSize();
 	bool renameAttribute(std::string oldName, std::string newName);
 	Table crossJoin(Table firstTable, Table secondTable);
