@@ -37,3 +37,19 @@ bool Table::renameAttribute(std::string _oldName, std::string _newName) {
 Table Table::crossJoin(Table _firstTable, Table _secondTable) {
 	return Table();
 }
+
+float Table::getSum(std::string _attributeName) {
+	return 0;
+}
+
+int Table::getCount(std::string _attributeName) {
+	return 0;
+}
+
+float Table::getMin(std::string _attributeName) {
+	return 0;
+}
+
+float Table::getMax(std::string _attributeName) {
+	return 0;
+}
