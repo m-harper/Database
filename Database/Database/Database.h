@@ -3,8 +3,6 @@
 #include "Table.h"
 
 class Database {
-
-	std::list<Table> tables;
 public:
 	Database();
 	~Database();
@@ -16,5 +14,7 @@ public:
 	Table query(std::list<std::string> tableAttributes ,std::string tableName, std::string whereArgument);
 	void deleteRecord(std::string tableName, std::string whereArgument);
 
+private:
+	std::list<Table> tables;
 };
 
