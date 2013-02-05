@@ -24,4 +24,3 @@ public:
 private:
 	std::list<Table> tables;
 };
-
