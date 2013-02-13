@@ -70,9 +70,9 @@ namespace T27UnitTest
 			Assert::AreEqual(1, j);
 			Assert::AreNotEqual(i, j);
 		}
-		TEST_METHOD(TestMerhod5)
+		TEST_METHOD(deleteAttribute)
 		{
-			// TODO
+			// deleteAttribute
 			DBMS::AttributeInfo attr1 = DBMS::AttributeInfo("Name", "string");
 			DBMS::AttributeInfo attr2 = DBMS::AttributeInfo("UIN", "int");
 			std::vector<DBMS::AttributeInfo> v;
@@ -83,12 +83,15 @@ namespace T27UnitTest
 			table.deleteAttribute("UIN");
 
 			int i = table.getAttributesPlace("UIN");
+			int j = table.getAttributesPlace("Age");
 
 			Assert::AreNotEqual(1, i);
+			Assert::AreEqual(j, -1);			// control error (there is not "Age' attributeInfo and trying to find it. Error => result is -1
 		}
 		TEST_METHOD(TestMerhod6)
 		{
 			// TODO
+
 		}
 	};
 }
