@@ -244,16 +244,13 @@ namespace T27UnitTest
 			DBMS::AttributeInfo attr1 = DBMS::AttributeInfo("Name", "string");
 			DBMS::AttributeInfo attr2 = DBMS::AttributeInfo("UIN", "int");
 			std::vector<DBMS::AttributeInfo> v;
-			std::string attr3 = std::string("Name");
-			std::string attr4 = std::string("UIN");
-			std::vector<std::string>va;
-			va.push_back(attr3);
-			va.push_back(attr4);
-			std::string s1 = "Name";
-			std::string s2 = "UIN";
+			std::vector<std::string> va;
 			std::vector<std::string> vs;
-			vs.push_back(s1);
-			vs.push_back(s2);
+			va.push_back(attr1.getAttributeName());
+			va.push_back(attr2.getAttributeName());
+			vs.push_back(attr1.getAttributeType());
+			vs.push_back(attr2.getAttributeType());
+
 			DBMS::Table table = DBMS::Table(v, "Student");
 
 			table.attributesToDelete(va, vs);
@@ -285,17 +282,148 @@ namespace T27UnitTest
 
 		// Record
 
-		TEST_METHOD(TestMethod18)
+		TEST_METHOD(addAttributeANDgetAttrib)
 		{
+			DBMS::Record record = DBMS::Record();
+			record.addAttribute("Name");
+			record.addAttribute("UIN");
+			record.addAttribute("Major");
+			record.addAttribute("Minor");
 
+			std::string s = record.getAttrib(1);
+			std::string ex = "UIN";
+			Assert::AreEqual(s, ex);
 		}
-		TEST_METHOD(TestMethod19)
+		TEST_METHOD(returnAttribute)
 		{
+			DBMS::Record record = DBMS::Record();
+			record.addAttribute("Name");
+			record.addAttribute("UIN");
+			record.addAttribute("Major");
+			record.addAttribute("Minor");
 
+			DBMS::Attribute attr1 = record.returnAttribute(2);
+			std::string s = attr1.getAttribute();
+			std::string ss = "Major";
+
+			Assert::AreEqual(s, ss);
 		}
-		TEST_METHOD(TestMethod20)
+		TEST_METHOD(numberOfAttributes)
 		{
+			DBMS::Record record = DBMS::Record();
+			record.addAttribute("Name");
+			record.addAttribute("UIN");
+			record.addAttribute("Major");
+			record.addAttribute("Minor");
 
+			int i = record.numberOfAttributes();
+
+			record.removeAttribute(2);
+
+			int j = record.numberOfAttributes();
+
+			Assert::AreNotEqual(i, j);
+			Assert::AreEqual(i-1, j);
+		}
+
+		//----------------------------------------------------------------
+
+		// Database
+
+		TEST_METHOD(addTableANDtableIndex)
+		{
+			// ** modify **
+
+			// I don't know how to initialize Database
+
+			// DBMS::Database database;
+
+			DBMS::AttributeInfo attr1 = DBMS::AttributeInfo("Name", "string");
+			DBMS::AttributeInfo attr2 = DBMS::AttributeInfo("UIN", "int");
+			std::vector<DBMS::AttributeInfo> v1;
+			v1.push_back(attr1);
+			v1.push_back(attr2);
+			DBMS::Table studentTable = DBMS::Table(v1, "Student");
+
+			DBMS::AttributeInfo attr3 = DBMS::AttributeInfo("Class", "string");
+			DBMS::AttributeInfo attr4 = DBMS::AttributeInfo("Average", "int");
+			DBMS::AttributeInfo attr5 = DBMS::AttributeInfo("Professor", "string");
+			std::vector<DBMS::AttributeInfo> v2;
+			v2.push_back(attr3);
+			v2.push_back(attr4);
+			v2.push_back(attr5);
+			DBMS::Table gradeTable = DBMS::Table(v2, "Grade");
+
+			DBMS::AttributeInfo attr6 = DBMS::AttributeInfo("Major", "string");
+			DBMS::AttributeInfo attr7 = DBMS::AttributeInfo("Student", "string");
+			std::vector<DBMS::AttributeInfo> v3;
+			v3.push_back(attr6);
+			v3.push_back(attr7);
+			DBMS::Table deptTable = DBMS::Table(v3, "Department");
+
+			std::vector<DBMS::Table> vectorTable;
+			vectorTable.push_back(studentTable);
+			vectorTable.push_back(gradeTable);
+			vectorTable.push_back(deptTable);
+
+			DBMS::AttributeInfo attr8 = DBMS::AttributeInfo("Name", "string");
+			DBMS::AttributeInfo attr9 = DBMS::AttributeInfo("What", "int");
+			std::vector<DBMS::AttributeInfo> v4;
+			v4.push_back(attr8);
+			v4.push_back(attr9);
+			DBMS::Table petTable = DBMS::Table(v4, "Pet");
+
+			// database.addTable(petTable, "Pet");
+			// int i = database.tableIndex("Pet");
+			// int j = 3;
+
+			// Assert::AreEqual(i, j);
+			
+		}
+		TEST_METHOD(dropTable)
+		{
+			// ** modify **
+			DBMS::AttributeInfo attr1 = DBMS::AttributeInfo("Name", "string");
+			DBMS::AttributeInfo attr2 = DBMS::AttributeInfo("UIN", "int");
+			std::vector<DBMS::AttributeInfo> v1;
+			v1.push_back(attr1);
+			v1.push_back(attr2);
+			DBMS::Table studentTable = DBMS::Table(v1, "Student");
+
+			DBMS::AttributeInfo attr3 = DBMS::AttributeInfo("Class", "string");
+			DBMS::AttributeInfo attr4 = DBMS::AttributeInfo("Average", "int");
+			DBMS::AttributeInfo attr5 = DBMS::AttributeInfo("Professor", "string");
+			std::vector<DBMS::AttributeInfo> v2;
+			v2.push_back(attr3);
+			v2.push_back(attr4);
+			v2.push_back(attr5);
+			DBMS::Table gradeTable = DBMS::Table(v2, "Grade");
+
+			DBMS::AttributeInfo attr6 = DBMS::AttributeInfo("Major", "string");
+			DBMS::AttributeInfo attr7 = DBMS::AttributeInfo("Student", "string");
+			std::vector<DBMS::AttributeInfo> v3;
+			v3.push_back(attr6);
+			v3.push_back(attr7);
+			DBMS::Table deptTable = DBMS::Table(v3, "Department");
+
+			std::vector<DBMS::Table> vectorTable;
+			vectorTable.push_back(studentTable);
+			vectorTable.push_back(gradeTable);
+			vectorTable.push_back(deptTable);
+
+			// database.dropTable("Grade");
+		}
+		TEST_METHOD(getTables)
+		{
+			// To do
+		}
+		TEST_METHOD(listTable)
+		{
+			// To do
+		}
+		TEST_METHOD(deleteTuples)
+		{
+			// To do
 		}
 	};
 }
