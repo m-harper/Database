@@ -20,7 +20,7 @@ class Record {
 public:
 	Record();
 	Record(const Record &in);
-	Record(int _entries, std::list<std::string>* _initialValues);
+	Record(std::list<std::string>* _initialValues);
 	~Record();
 
    std::string* accessRecordEntry(int entry);

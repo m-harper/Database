@@ -3,6 +3,7 @@
 using namespace std;
 
 Record::Record() {
+	// Intentionally left empty
 }
 
 Record::Record(const Record &in) {
@@ -12,21 +13,22 @@ Record::Record(const Record &in) {
 	}
 }
 
-Record::Record(int _entries, std::list<std::string>* _initialValues) {
-
+Record::Record(std::list<std::string>* _initialValues) {
+	for (list<string>::iterator it = _initialValues->begin(); it != _initialValues->end(); it++) {
+		tuple.push_back(*it);
+	}
 }
 
 Record::~Record() {
+	// Intentionally left empty
 }
 
 // Returns a pointer to the string in the tuple
-//std::string* Record::accessRecordEntry(int _entry) const 
 std::string* Record::accessRecordEntry(int _entry)  {
 	int index = 0;
 	for (list<string>::iterator it = tuple.begin();	it != tuple.end();	it++) {
 		if (index == _entry){
 			return &(*it);
-			//return &(*it);
 		}
 		index++;
 	}
@@ -52,6 +54,7 @@ std::string Record::retrieveRecordEntry(int _entry) const {
 		if (index == _entry) {
 			return *it;
 		}
+		index++;
 	}
 
 	// Return null if entry not found
