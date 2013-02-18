@@ -16,11 +16,13 @@ public:
 
 	void addTable(Table table, std::string name);
 	void dropTable(std::string tableName);
-	std::list<std::string>* listTables();
-	std::list<Table>* getTables();
+	std::list<std::string> listTables();
+	std::list<Table> getTables() const;
+	std::list<std::string> getNames() const;
 	Table query(std::list<std::string> tableAttributes ,std::string tableName, std::string whereArgument);
 	void deleteRecord(std::string tableName, std::string whereArgument);
 
 private:
+	std::list<std::string> tableNames;
 	std::list<Table> tables;
 };
