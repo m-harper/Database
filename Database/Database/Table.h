@@ -10,13 +10,12 @@ public:
 	Table();
 	Table(const Table &in);
 	Table(std::list<std::string>*, std::list<Type>*);
-	Table(std::list<Record>*);
 	~Table();
 
 	void addAttribute(std::string name, Type type);
 	bool deleteAttribute(std::string name);
 	void insertRecord(Record record);
-	std::list<std::string>* getAttributes(); // 'returns a std::list of the attributes AND types...' ????
+	std::list<std::string> getAttributes(); // returns a std::list of the form "type attribute"
 	unsigned int getSize();
 	bool renameAttribute(std::string oldName, std::string newName);
 	Table crossJoin(Table firstTable, Table secondTable);
