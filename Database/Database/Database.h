@@ -7,6 +7,7 @@
 #endif
 
 #include "Table.h"
+#include <sstream>
 
 class DB_API Database {
 private:
@@ -25,6 +26,8 @@ public:
 	Table query(std::list<std::string> tableAttributes ,std::string tableName, std::string whereArgument);
 	void deleteRecord(std::string tableName, std::string whereArgument);
 
+	double stringToDouble(std::string);
+
 	// Parser functions
 	enum token { eq, neq, lt, lte, gt, gte, in, exists, and, or, not, lpar, rpar, all, any, field, num };
 	token getToken(std::string&);
@@ -36,7 +39,9 @@ private:
 
 	// Class for parser ouput
 	class Parsed {
+	public:
 		std::list<std::string> fields;
 		std::list<std::string> conditions;
+		std::list<double> numbers;
 	};
 };

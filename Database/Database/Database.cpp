@@ -60,6 +60,40 @@ std::list<std::string> Database::getNames() const {
 }
 
 Table Database::query(std::list<std::string> _tableAttributes, std::string _tableName, std::string _where) {
+	// Get the index of the requested table
+	int tableIndex = 0;
+	for (std::list<std::string>::iterator it = tableNames.begin(); it != tableNames.end(); it++) {
+		if (*it == _tableName) {
+			break;
+		}
+		tableIndex++;
+	}
+
+	// Get the requested table
+	std::list<Table>::iterator tit = tables.begin();
+	for (int i = 0; i < tableIndex; i++) {
+		tit++;
+	}
+	Table table = *tit;
+
+
+	// Get the index of the requested attribute in the table
+	std::list<int> indices;
+	int attIndex = 0;
+	for (std::list<std::string>::iterator ait = _tableAttributes.begin(); ait != _tableAttributes.end(); ait++) {
+		for (std::list<std::string>::iterator it = table.getFields().begin(); it != table.getFields().end(); it++) {
+			if (*ait == *it) {
+				indices.push_back(attIndex);
+			}
+			attIndex++;
+		}
+		attIndex =0;
+	}
+
+	// We now have the correct table and the indicies of the requested fields
+	// TODO parse _where to sort fields
+	
+
 	return Table();
 }
 
@@ -205,17 +239,31 @@ Database::token Database::getToken(std::string& _where) {
 
 Database::Parsed Database::parse(std::string _where) {
 	Parsed parsed;
+	std::string fieldName;
+	double number;
 
 	while (_where != "") {
 		switch (getToken(_where)) {
 		case field:
 			// Remove the field from the string
+			fieldName = _where.substr(0, _where.find(" "));
+			_where = _where.substr(_where.find(" ") + 1);
+			parsed.fields.push_back(fieldName);
 			break;
 		case num:
 			// Remove the num from the string
+			number = stringToDouble(_where.substr(0, _where.find(" ")));
+			parsed.numbers.push_back(number);
 			break;
 		// For all other cases, token has already been removed
 
 		}
 	}
+}
+
+double Database::stringToDouble(std::string _string) {
+	std::stringstream ss(_string);
+	double result;
+	ss >> result;
+	return result;
 }
