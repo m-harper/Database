@@ -28,6 +28,8 @@ public:
 	float getMin(std::string attributeName);
 	float getMax(std::string attributeName);
 
+	double stringToDouble(std::string _string);
+
 private:
 	std::list<std::string> fields;
 	std::list<Record> records;

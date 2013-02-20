@@ -9,17 +9,17 @@ Table::Table() {
 Table::Table(const Table& _table) {
 	// Need to copy in records, fields, and types
 	// Copy records
-	for (list<Record>::iterator it = _table.getRecords().begin(); it != _table.getRecords.end(); it++) {
+	for (list<Record>::iterator it = _table.getRecords().begin(); it != _table.getRecords().end(); it++) {
 		records.push_back(*it);
 	}
 
 	// Copy fields
-	for (list<std::string>::iterator it = _table.getFields().begin(); it != _table.getFields.end(); it++) {
+	for (list<std::string>::iterator it = _table.getFields().begin(); it != _table.getFields().end(); it++) {
 		fields.push_back(*it);
 	}
 
 	// Copy types
-	for (list<Type>::iterator it = _table.getTypes().begin(); it != _table.getTypes.end(); it++) {
+	for (list<Type>::iterator it = _table.getTypes().begin(); it != _table.getTypes().end(); it++) {
 		types.push_back(*it);
 	}
 }
@@ -102,7 +102,7 @@ bool Table::renameAttribute(std::string _oldName, std::string _newName) {
 Table Table::crossJoin(Table _firstTable, Table _secondTable) {
 	// Copy constructor takes care of fields and types for both tables
 	Table table = Table(_firstTable);
-	for (list<Record>::iterator it = _secondTable.getRecords().begin(); it != _secondTable.getRecords.end(); it++) {
+	for (list<Record>::iterator it = _secondTable.getRecords().begin(); it != _secondTable.getRecords().end(); it++) {
 		table.insertRecord(*it);
 	}
 	return table;
@@ -211,7 +211,7 @@ float Table::getMax(std::string _attributeName) {
 	return max;
 }
 
-double stringToDouble(std::string _string) {
+double Table::stringToDouble(std::string _string) {
 	stringstream ss(_string);
 	double result;
 	ss >> result;
