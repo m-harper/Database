@@ -9,6 +9,9 @@
 #include "Table.h"
 
 class DB_API Database {
+private:
+	class Parsed;
+
 public:
 	Database();
 	Database(const Database&);
@@ -25,7 +28,7 @@ public:
 	// Parser functions
 	enum token { eq, neq, lt, lte, gt, gte, in, exists, and, or, not, lpar, rpar, all, any, field, num };
 	token getToken(std::string&);
-	void parse(std::string);
+	Parsed parse(std::string);
 
 private:
 	std::list<std::string> tableNames;

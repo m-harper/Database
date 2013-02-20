@@ -55,6 +55,10 @@ std::list<Table> Database::getTables() const {
 	return tables;
 }
 
+std::list<std::string> Database::getNames() const {
+	return tableNames;
+}
+
 Table Database::query(std::list<std::string> _tableAttributes, std::string _tableName, std::string _where) {
 	return Table();
 }
@@ -199,7 +203,7 @@ Database::token Database::getToken(std::string& _where) {
 	return field;
 }
 
-void Database::parse(std::string _where) {
+Database::Parsed Database::parse(std::string _where) {
 	Parsed parsed;
 
 	while (_where != "") {
