@@ -90,6 +90,14 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 	}
 
 	// We now have the correct table and the indicies of the requested fields
+	// We assume that _where is of the form "attribute op value"
+	std::string where = _where;
+	std::string attribute = where.substr(0, where.find(" "));
+	where = where.substr(where.find(" ") + 1);
+	std::string op = where.substr(0, where.find(" "));
+	where = where.substr(where.find(" ") + 1);
+	std::string valueString = where;
+	double value = stringToDouble(valueString);
 	// TODO parse _where to sort fields
 	
 
