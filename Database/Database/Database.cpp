@@ -220,6 +220,10 @@ Database::Token Database::getToken(std::string& _where) {
 		_where = _where.substr(_where.find(" "));
 		return Token('c', "any");
 	}
+	if (piece == "&&") {
+		_where = _where.substr(_where.find(" "));
+		return Token(true);
+	}
 	
 	// Check if the piece is a number
 	bool isNum = true;
@@ -236,7 +240,7 @@ Database::Token Database::getToken(std::string& _where) {
 	//	if(numType == "int"){
 	//		return Token('8', stringToInt(piece));
 	//	} else if(numType == "double"){
-			return Token('8', stringToDouble(piece));
+			return Token(stringToDouble(piece));
 	//	}
 	}
 
@@ -260,7 +264,7 @@ Database::Token Database::parse(std::string _where) {
 
 		tokenVector.push_back(t);
 		
-
+		statement();
 		/*if(t.kind == field){
 			// Remove the field from the string
 			fieldName = _where.substr(0, _where.find(" "));

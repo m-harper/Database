@@ -58,15 +58,15 @@ private:
 	public:
 		char kind;			// what kind of token
 		bool boolean;
-		int value;
+//		int value;
 		double value;		// for number: a value
 		std::string name;	// for name: name itself
 		Token();
 		Token(char ch):kind(ch), value(0) {}
-		Token(char ch, bool b):kind(ch), boolean(b) {}
-		Token(char ch, int val):kind(ch), value(val) {}
-		Token(char ch, float val):kind(ch), value(val) {}
-		Token(char ch, double val):kind(ch), value(val) {}
+		Token(bool b):boolean(b) { kind = 'c'; }
+//		Token(char ch, int val):kind(ch), value(val) {}
+//		Token(char ch, float val):kind(ch), value(val) {}
+		Token(double val):value(val) { kind = '8'; }
 		Token(char ch, std::string n):kind(ch), name(n) {}
 
 		std::list<std::string> fields;
@@ -75,6 +75,7 @@ private:
 	};
 
 	std::vector<Token> tokenVector;
+	std::string statement();
 
 /*	class Token_stream {
 	public:
