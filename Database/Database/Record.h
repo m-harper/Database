@@ -6,7 +6,7 @@
 	You should have a separate record class that is used to store an individual record (tuple).  
 	A record should consist of an ordered set of strings.  Note that the record should be strings, 
 	though those strings might represent an integer, floating point number, date, or time.   
-	That is, a record on its own has no “knowledge” of what its entries mean, but sees them all 
+	That is, a record on its own has no “knowledge?of what its entries mean, but sees them all 
 	as strings.  Note that strings can be implemented as character arrays or using the string class.  
 	Also, how the record itself is implemented is up to you (e.g. it could be an array, it could 
 	be a container).  The routines that need to be provided for records include:

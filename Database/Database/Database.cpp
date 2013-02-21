@@ -140,15 +140,21 @@ void Database::deleteRecord(std::string _tableName, std::string _where) {
 
 
 
-Database::token Database::getToken(std::string& _where) {
+Database::Token Database::getToken(std::string& _where) {
+
+	// make empty vector
+	if(tokenVector.size() != 0){
+		tokenVector.clear();
+	}
+	
 	// First check for parenthesis
 	if (_where[0] == '(') {
 		_where = _where.substr(1);
-		return lpar;
+		return Token('(');
 	}
 	if (_where[0] == ')') {
 		_where = _where.substr(1);
-		return rpar;
+		return Token(')');
 	}
 	
 	// Get a token from the string up to the first space
@@ -157,67 +163,67 @@ Database::token Database::getToken(std::string& _where) {
 	if (piece == "=") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return eq;
+		return Token('c', "eq");
 	}
 	if (piece == "!=") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return neq;
+		return Token('c', "neq");
 	}
 	if (piece == "<") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return lt;
+		return Token('c', "lt");
 	}
 	if (piece == "<=") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return lte;
+		return Token('c', "lte");
 	}
 	if (piece == ">") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return gt;
+		return Token('c', "gt");
 	}
 	if (piece == ">=") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return gte;
-	}
+		return Token('c', "gte");
+	}		
 	if (piece == "IN") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return in;
+		return Token('c', "in");
 	}
 	if (piece == "EXISTS") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return exists;
+		return Token('c', "exists");
 	}
 	if (piece == "AND") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return and;
+		return Token('c', "and");
 	}
 	if (piece == "OR") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return or;
+		return Token('c', "or");
 	}
 	if (piece == "NOT") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return not;
+		return Token('c', "not");
 	}
 	if (piece == "ALL") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return all;
+		return Token('c', "all");
 	}
 	if (piece == "ANY") {
 		// Remove the token from the string
 		_where = _where.substr(_where.find(" "));
-		return any;
+		return Token('c', "any");
 	}
 	
 	// Check if the piece is a number
@@ -229,15 +235,22 @@ Database::token Database::getToken(std::string& _where) {
 		}
 	}
 	
+	
 	if (isNum) {
-		return num;
+		std::string numType = checkNumType(piece);
+		if(numType == "int"){
+			return Token('8', stringToInt(piece));
+		} else if(numType == "double"){
+			return Token('8', stringToDouble(piece));
+		}
 	}
 
-	// Everything else has been exhausted, token must be the name of a field
-	return field;
+	// Everything else is string
+	return Token('a', piece);
 }
 
 Database::Parsed Database::parse(std::string _where) {
+
 	Parsed parsed;
 	std::string fieldName;
 	double number;
@@ -266,4 +279,25 @@ double Database::stringToDouble(std::string _string) {
 	double result;
 	ss >> result;
 	return result;
+}
+
+int Database::stringToInt(std::string _string){
+	std::istringstream ss(_string);
+	int result;
+	ss >> result;
+	return result;
+}
+
+std::string checkNumType(std::string _string) {
+
+	std::string numType = "int";
+
+	for (int i = 0; i < _string.length(); i++) {
+		if (_string[i] == '.') {
+			numType = "double";
+			break;
+		}
+	}
+
+	return numType;
 }
