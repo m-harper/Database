@@ -35,23 +35,23 @@ public:
 	// Parser functions
 //	enum token { eq, neq, lt, lte, gt, gte, in, exists, and, or, not, lpar, rpar, all, any, field, num };
 	Token getToken(std::string&);
-	Parsed parse(std::string);
+	Token parse(std::string);
 
 private:
 	std::list<std::string> tableNames;
 	std::list<Table> tables;
 
 	// Class for parser ouput
-	class Parsed {
+/*	class Parsed {
 	public:
 		std::list<std::string> fields;
 		std::list<std::string> conditions;
 		std::list<double> numbers;
-	};
+	};		*/
 
 	const char condition = 'c';	// t.kind == condition means that t is a condition Token
 	const char number = '8';	// t.kind == number means that t is a number Token
-	const char name = 'a';		// t.kind == name means that t is a name Token
+	const char field = 'a';		// t.kind == name means that t is a name Token
 	const char boolean = 'b';	// t.kind == boolean means that t is a boolean Token	
 
 	class Token {
@@ -61,12 +61,17 @@ private:
 		int value;
 		double value;		// for number: a value
 		std::string name;	// for name: name itself
+		Token();
 		Token(char ch):kind(ch), value(0) {}
 		Token(char ch, bool b):kind(ch), boolean(b) {}
 		Token(char ch, int val):kind(ch), value(val) {}
 		Token(char ch, float val):kind(ch), value(val) {}
 		Token(char ch, double val):kind(ch), value(val) {}
 		Token(char ch, std::string n):kind(ch), name(n) {}
+
+		std::list<std::string> fields;
+		std::list<std::string> conditions;
+		std::list<double> numbers;
 	};
 
 	std::vector<Token> tokenVector;

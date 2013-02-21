@@ -141,11 +141,6 @@ void Database::deleteRecord(std::string _tableName, std::string _where) {
 
 
 Database::Token Database::getToken(std::string& _where) {
-
-	// make empty vector
-	if(tokenVector.size() != 0){
-		tokenVector.clear();
-	}
 	
 	// First check for parenthesis
 	if (_where[0] == '(') {
@@ -237,40 +232,51 @@ Database::Token Database::getToken(std::string& _where) {
 	
 	
 	if (isNum) {
-		std::string numType = checkNumType(piece);
-		if(numType == "int"){
-			return Token('8', stringToInt(piece));
-		} else if(numType == "double"){
+	//	std::string numType = checkNumType(piece);
+	//	if(numType == "int"){
+	//		return Token('8', stringToInt(piece));
+	//	} else if(numType == "double"){
 			return Token('8', stringToDouble(piece));
-		}
+	//	}
 	}
 
 	// Everything else is string
 	return Token('a', piece);
 }
 
-Database::Parsed Database::parse(std::string _where) {
+Database::Token Database::parse(std::string _where) {
 
-	Parsed parsed;
+	// make empty vector
+	if(tokenVector.size() != 0){
+		tokenVector.clear();
+	}
+
 	std::string fieldName;
 	double number;
 
 	while (_where != "") {
-		switch (getToken(_where)) {
-		case field:
+		Token t;
+		t = getToken(_where);
+
+		tokenVector.push_back(t);
+		
+
+		/*if(t.kind == field){
 			// Remove the field from the string
 			fieldName = _where.substr(0, _where.find(" "));
 			_where = _where.substr(_where.find(" ") + 1);
-			parsed.fields.push_back(fieldName);
+			t.fields.push_back(fieldName);
 			break;
-		case num:
+		}
+		if(t.kind == number){
 			// Remove the num from the string
 			number = stringToDouble(_where.substr(0, _where.find(" ")));
-			parsed.numbers.push_back(number);
+			t.numbers.push_back(number);
 			break;
+		}*/
 		// For all other cases, token has already been removed
 
-		}
+		
 	}
 }
 
@@ -281,6 +287,7 @@ double Database::stringToDouble(std::string _string) {
 	return result;
 }
 
+/*
 int Database::stringToInt(std::string _string){
 	std::istringstream ss(_string);
 	int result;
@@ -301,3 +308,4 @@ std::string checkNumType(std::string _string) {
 
 	return numType;
 }
+*/
