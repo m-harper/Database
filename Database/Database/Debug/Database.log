@@ -1,7 +1,15 @@
-﻿Build started 2/21/2013 12:26:44 PM.
+﻿Build started 2/21/2013 2:42:31 PM.
      1>Project "\\filer\mharper\ms_windows\cpsc_redirected\My Documents\Visual Studio 2012\Projects\Database\Database\Database\Database.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _WINDLL /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Database.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _WINDLL /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Database.cpp Record.cpp Table.cpp
+         Table.cpp
+     1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\table.cpp(137): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\table.cpp(176): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\table.cpp(181): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\table.cpp(202): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\table.cpp(207): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+         Record.cpp
+     1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\record.cpp(11): warning C4018: '<' : signed/unsigned mismatch
          Database.cpp
      1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\database.h(35): warning C4251: 'Database::tableNames' : class 'std::list<_Ty>' needs to have dll-interface to be used by clients of class 'Database'
                  with
@@ -31,11 +39,11 @@
                  \\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\database.h(25) : see previous definition of 'getNames'
      1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\database.cpp(61): warning C4273: 'Database::query' : inconsistent dll linkage
                  \\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\database.h(26) : see previous definition of 'query'
-     1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\database.cpp(129): warning C4018: '<' : signed/unsigned mismatch
-     1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\database.cpp(240): warning C4273: 'Database::deleteRecord' : inconsistent dll linkage
+     1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\database.cpp(257): warning C4273: 'Database::deleteRecord' : inconsistent dll linkage
                  \\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\database.h(27) : see previous definition of 'deleteRecord'
-     1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\database.cpp(260): warning C4273: 'Database::stringToDouble' : inconsistent dll linkage
+     1>\\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\database.cpp(277): warning C4273: 'Database::stringToDouble' : inconsistent dll linkage
                  \\filer\mharper\ms_windows\cpsc_redirected\my documents\visual studio 2012\projects\database\database\database\database.h(29) : see previous definition of 'stringToDouble'
+         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\filer\mharper\ms_windows\cpsc_redirected\My Documents\Visual Studio 2012\Projects\Database\Database\Debug\Database.dll" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"\\filer\mharper\ms_windows\cpsc_redirected\My Documents\Visual Studio 2012\Projects\Database\Database\Debug\Database.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\filer\mharper\ms_windows\cpsc_redirected\My Documents\Visual Studio 2012\Projects\Database\Database\Debug\Database.lib" /MACHINE:X86 /DLL Debug\Database.obj
          Debug\Record.obj
@@ -46,4 +54,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.75
+Time Elapsed 00:00:06.04
