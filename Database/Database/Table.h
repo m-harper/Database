@@ -3,10 +3,12 @@
 #include "Record.h"
 #include <sstream>
 
-enum Type {INT, FLOAT, string, DATE};
+
 
 class Table {	
 public:
+	enum Type {INT, FLOAT, string, DATE};
+
 	Table();
 	Table(const Table &in);
 	Table(std::list<std::string>*, std::list<Type>*);

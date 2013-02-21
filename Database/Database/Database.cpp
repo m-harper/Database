@@ -86,7 +86,7 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 			}
 			attIndex++;
 		}
-		attIndex =0;
+		attIndex = 0;
 	}
 
 	// We now have the correct table and the indicies of the requested fields
@@ -94,14 +94,147 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 	std::string where = _where;
 	std::string attribute = where.substr(0, where.find(" "));
 	where = where.substr(where.find(" ") + 1);
-	std::string op = where.substr(0, where.find(" "));
+	std::string opStr = where.substr(0, where.find(" "));
 	where = where.substr(where.find(" ") + 1);
 	std::string valueString = where;
 	double value = stringToDouble(valueString);
-	// TODO parse _where to sort fields
-	
 
-	return Table();
+	// Convert the op string to a token
+	token op;
+	if (opStr == "=")
+		op = eq;
+	if (opStr == "!=")
+		op = neq;
+	if (opStr == "<")
+		op = lt;
+	if (opStr == "<=")
+		op = lte;
+	if (opStr == ">")
+		op = gt;
+	if (opStr == ">=")
+		op = gte;
+
+	// Now we have the needed information
+	// Make a new table with the desired qualities
+	Table newTable = Table();
+
+	// Add the attributes to the table
+	// Get the list of all the attributes of the table
+	std::list<std::string> atts = table.getAttributes();
+	// Loop to only select attributes the match the wanted indicies
+	for (std::list<int>::iterator iit = indices.begin(); iit != indices.end(); iit++) {
+		std::string name, fullAtt;
+		Table::Type type; 
+		std::list<std::string>::iterator it = atts.begin();
+		for (int j = 0; j < atts.size(); j++) {
+			if (*iit == j) {
+				// We match a wanted index
+				// Add this attribute to the new table
+				fullAtt = *it;
+				std::string typeStr = fullAtt.substr(0, fullAtt.find(" "));
+				if (typeStr == "0")
+					type = Table::INT;
+				if (typeStr == "1")
+					type = Table::FLOAT;
+				if (typeStr == "3")
+					type = Table::string;
+				if (typeStr == "4")
+					type = Table::DATE;
+
+				name = fullAtt.substr(fullAtt.find(" ") + 1);
+				newTable.addAttribute(name, type);
+			}
+			it++;
+		}
+		// Reset the attribute iterator
+		it = atts.begin();
+	}
+
+	// All the correct attributes have been added
+	// Get the index of the _where attribute in the record/table
+	int recInd = 0;
+	for (std::list<std::string>::iterator it = table.getAttributes().begin(); it != table.getAttributes().end(); it++) {
+		// Split the attribute into type and name, attribute is of form "type name"
+		// All we need is name
+		std::string name = (*it).substr((*it).find(" ") + 1);
+		if (attribute == name) {
+			// Found the required attribute
+			break;
+		}
+		recInd++;
+	}
+
+	// Now add the records that match the condition
+	// Loop through the records of the original table
+	for (std::list<Record>::iterator it = table.getRecords().begin(); it != table.getRecords().end(); it++) {
+		std::string recordEntry = (*it).retrieveRecordEntry(recInd);
+		// Check if the record entry meets the condition
+		switch (op) {
+		case eq:
+			if (recordEntry == valueString) {
+				// Condition met, add record to new table
+				// WE PROBABLY NEED TO MATCH UP WITH THE ATTRIBUTES ALREADY IN THE TABLE, LOOK HERE IF SOMETHING BREAKS
+				std::list<std::string>* initialValues = new std::list<std::string>();
+				initialValues->push_back(recordEntry);
+				newTable.insertRecord(Record(initialValues));
+				delete initialValues;
+			}
+			break;
+		case neq:
+			if (recordEntry != valueString) {
+				// Condition met, add record to new table
+				// WE PROBABLY NEED TO MATCH UP WITH THE ATTRIBUTES ALREADY IN THE TABLE, LOOK HERE IF SOMETHING BREAKS
+				std::list<std::string>* initialValues = new std::list<std::string>();
+				initialValues->push_back(recordEntry);
+				newTable.insertRecord(Record(initialValues));
+				delete initialValues;
+			}
+			break;
+		case lt:
+			if (stringToDouble(recordEntry) < stringToDouble(valueString)) {
+				// Condition met, add record to new table
+				// WE PROBABLY NEED TO MATCH UP WITH THE ATTRIBUTES ALREADY IN THE TABLE, LOOK HERE IF SOMETHING BREAKS
+				std::list<std::string>* initialValues = new std::list<std::string>();
+				initialValues->push_back(recordEntry);
+				newTable.insertRecord(Record(initialValues));
+				delete initialValues;
+			}
+			break;
+		case lte:
+			if (stringToDouble(recordEntry) <= stringToDouble(valueString)) {
+				// Condition met, add record to new table
+				// WE PROBABLY NEED TO MATCH UP WITH THE ATTRIBUTES ALREADY IN THE TABLE, LOOK HERE IF SOMETHING BREAKS
+				std::list<std::string>* initialValues = new std::list<std::string>();
+				initialValues->push_back(recordEntry);
+				newTable.insertRecord(Record(initialValues));
+				delete initialValues;
+			}
+			break;
+		case gt:
+			if (stringToDouble(recordEntry) > stringToDouble(valueString)) {
+				// Condition met, add record to new table
+				// WE PROBABLY NEED TO MATCH UP WITH THE ATTRIBUTES ALREADY IN THE TABLE, LOOK HERE IF SOMETHING BREAKS
+				std::list<std::string>* initialValues = new std::list<std::string>();
+				initialValues->push_back(recordEntry);
+				newTable.insertRecord(Record(initialValues));
+				delete initialValues;
+			}
+			break;
+		case gte:
+			if (stringToDouble(recordEntry) >= stringToDouble(valueString)) {
+				// Condition met, add record to new table
+				// WE PROBABLY NEED TO MATCH UP WITH THE ATTRIBUTES ALREADY IN THE TABLE, LOOK HERE IF SOMETHING BREAKS
+				std::list<std::string>* initialValues = new std::list<std::string>();
+				initialValues->push_back(recordEntry);
+				newTable.insertRecord(Record(initialValues));
+				delete initialValues;
+			}
+			break;
+		}
+	}
+
+
+	return newTable;
 }
 
 void Database::deleteRecord(std::string _tableName, std::string _where) {

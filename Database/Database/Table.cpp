@@ -116,7 +116,7 @@ std::list<std::string> Table::getFields() const {
 	return fields;
 }
 
-std::list<Type> Table::getTypes() const {
+std::list<Table::Type> Table::getTypes() const {
 	return types;
 }
 
