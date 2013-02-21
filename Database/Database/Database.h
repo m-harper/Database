@@ -8,12 +8,10 @@
 
 #include "Table.h"
 #include <sstream>
-#include <vector>
 
 class DB_API Database {
 private:
-	class Parsed;
-	class Token;
+	class Parse;
 
 public:
 	Database();
@@ -29,63 +27,42 @@ public:
 	void deleteRecord(std::string tableName, std::string whereArgument);
 
 	double stringToDouble(std::string);
-	int stringToInt(std::string);
-	std::string checkNumType(std::string);
 
 	// Parser functions
-//	enum token { eq, neq, lt, lte, gt, gte, in, exists, and, or, not, lpar, rpar, all, any, field, num };
-	Token getToken(std::string&);
-	Token parse(std::string);
+	enum token { eq, neq, lt, lte, gt, gte, in, exists, and, or, not, lpar, rpar, all, any, field, num };
 
 private:
 	std::list<std::string> tableNames;
 	std::list<Table> tables;
+};
 
-	// Class for parser ouput
-/*	class Parsed {
+class Database::Parse {
+	struct Token;
+	class TokenStream;
+public:
+	Parse() {};
+
+};
+
+struct Database::Parse::Token {
+	char kind;
+		double value;
+		std::string name;
+		Token(char ch) :kind(ch), value(0) { }
+		Token(char ch, double val) :kind(ch), value(val) { }
+		Token(char ch, std::string n) :kind(ch), name(n) { }
+};
+
+class Database::Parse::TokenStream {
+	bool isFull;
+		Token buffer;
+
 	public:
-		std::list<std::string> fields;
-		std::list<std::string> conditions;
-		std::list<double> numbers;
-	};		*/
+		// Defult constructor
+		TokenStream() :isFull(false), buffer(0) { }
 
-	const char condition = 'c';	// t.kind == condition means that t is a condition Token
-	const char number = '8';	// t.kind == number means that t is a number Token
-	const char field = 'a';		// t.kind == name means that t is a name Token
-	const char boolean = 'b';	// t.kind == boolean means that t is a boolean Token	
+		Token get();
+		void unget(Token t) { buffer = t; isFull = true; }
 
-	class Token {
-	public:
-		char kind;			// what kind of token
-		bool boolean;
-//		int value;
-		double value;		// for number: a value
-		std::string name;	// for name: name itself
-		Token();
-		Token(char ch):kind(ch), value(0) {}
-		Token(bool b):boolean(b) { kind = 'c'; }
-//		Token(char ch, int val):kind(ch), value(val) {}
-//		Token(char ch, float val):kind(ch), value(val) {}
-		Token(double val):value(val) { kind = '8'; }
-		Token(char ch, std::string n):kind(ch), name(n) {}
-
-		std::list<std::string> fields;
-		std::list<std::string> conditions;
-		std::list<double> numbers;
-	};
-
-	std::vector<Token> tokenVector;
-	std::string statement();
-
-/*	class Token_stream {
-	public:
-		Token_stream();		// make a Token_stream that reads from cin
-		Token get();		// get a Token (get() is defined elsewhere)
-		void putback(Token t);	// put a Token back
-		void ignore(char c);	// discard characters up to and including a c
-	private:
-		bool full;			// is there a Token in the buffer?
-		Token buffer;		// here is where we keep a token put back using putback()
-	};		*/
-
+		void ignore(char);
 };
