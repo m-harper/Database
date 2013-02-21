@@ -33,34 +33,37 @@ public:
 	// Parser functions
 	enum token { eq, neq, lt, lte, gt, gte, in, exists, and, or, not, lpar, rpar, all, any, field, num };
 
+	std::vector<Token> vectorToken;
+
 private:
 	std::list<std::string> tableNames;
 	std::list<Table> tables;
-	std::vector<Token> vectorToken;
 };
 
 
-class Database::Parse {
-	struct Token;
+/*class Database::Parse {
+	class Token;
 	class TokenStream;
 public:
 	Parse() {};
 
-};
+};*/
 
 
 const char attribute = 'a';		// t.kind == attribute means t is attribute
 const char op = 'o';			// t.kind == op means t is an operator
 const char number = '8';		// t.kind == number means t is a number
 
-struct Database::Parse::Token {
+class Database::Token {
+public:
 	char kind;
 	double value;
 	std::string name;
-	Token() {}
+//	token op;
 	Token(char ch) :kind(ch), value(0) { }
 	Token(char ch, double val) :kind(ch), value(val) { }
 	Token(char ch, std::string n) :kind(ch), name(n) { }
+//	Token(char ch, token n) :kind(ch), op(n) {}
 };
 
 /*

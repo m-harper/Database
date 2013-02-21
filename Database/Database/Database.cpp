@@ -136,16 +136,17 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 
 	// Convert from word to Token
 	for(int i = 0; i < vectorString.size(); i++){
-		
+
 		// parentheses
 		if(vectorString[i] == "(")
 			vectorToken.push_back('(');
 		else if(vectorString[i] == ")")
 			vectorToken.push_back(')');
-
+		
 		// op Token
-		else if(vectorString[i] == "=")
+		else if(vectorString[i] == "="){
 			vectorToken.push_back('o', eq);
+		}
 		else if(vectorString[i] == "!=")
 			vectorToken.push_back('o', neq);
 		else if(vectorString[i] == "<")
