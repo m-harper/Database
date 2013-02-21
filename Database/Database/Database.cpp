@@ -114,8 +114,68 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 	// Loop through records of old table and extract records whose condition matches
 	// First, get the entry number of the attribute in the record
 	// TODO
-	/*
-		std::string attName = // attribute name from _where
+	
+	// parsing _where
+
+	// vector for storing word parsed from _where
+	std::vector<std::string> vectorString;
+
+	std::string::iterator it = _where.begin();
+
+	while(it != _where.end()){
+		std::string word = "";
+		while((it != _where.end()) && (*it != ' ')){
+			word += *it;
+			++it;
+		}
+		if(it != _where.end()){
+			++it;
+		}
+		vectorString.push_back(word);
+	}
+
+	// Convert from word to Token
+	for(int i = 0; i < vectorString.size(); i++){
+		
+		// parentheses
+		if(vectorString[i] == "(")
+			vectorToken.push_back('(');
+		else if(vectorString[i] == ")")
+			vectorToken.push_back(')');
+
+		// op Token
+		else if(vectorString[i] == "=")
+			vectorToken.push_back('o', eq);
+		else if(vectorString[i] == "!=")
+			vectorToken.push_back('o', neq);
+		else if(vectorString[i] == "<")
+			vectorToken.push_back('o', lt);
+		else if(vectorString[i] == "<=")
+			vectorToken.push_back('o', lte);
+		else if(vectorString[i] == ">")
+			vectorToken.push_back('o', gt);
+		else if(vectorString[i] == ">=")
+			vectorToken.push_back('o', gte);
+		else if(vectorString[i] == "AND")
+			vectorToken.push_back('o', and);
+		else if(vectorString[i] == "OR")
+			vectorToken.push_back('o', or);
+		else if(vectorString[i] == "NOT")
+			vectorToken.push_back('o', not);
+
+		// number token
+		else if(isdigit(vectorString[i])){
+			double d = stringToDouble(vectorString[i]);
+			vectorToken.push_back('8', d);
+		}
+
+		// attribute token
+		else{
+			vectorToken.push_back('a', vectorString[i]);
+		}
+	}
+
+	/*	std::string attName = // attribute name from _where
 		int index = 0;
 		for (std::list<std::string>::iterator it = oldTable.getAttributes().begin(); it != oldTable.getAttributes().end(); it++) {
 			// Attributes are of the form "type name"
@@ -127,7 +187,7 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 			}
 			index++;
 		}
-
+	
 		// The operation from _where is stored in a token called op
 		Token op; // TODO assign based on parsing
 
@@ -167,8 +227,8 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 				break;
 			}
 		}
-		
-	*/
+		*/
+	
 
 	return newTable;
 }

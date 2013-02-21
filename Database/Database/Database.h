@@ -8,10 +8,12 @@
 
 #include "Table.h"
 #include <sstream>
+#include <vector>
 
 class DB_API Database {
 private:
 	class Parse;
+	class Token;
 
 public:
 	Database();
@@ -34,7 +36,9 @@ public:
 private:
 	std::list<std::string> tableNames;
 	std::list<Table> tables;
+	std::vector<Token> vectorToken;
 };
+
 
 class Database::Parse {
 	struct Token;
@@ -44,15 +48,22 @@ public:
 
 };
 
+
+const char attribute = 'a';		// t.kind == attribute means t is attribute
+const char op = 'o';			// t.kind == op means t is an operator
+const char number = '8';		// t.kind == number means t is a number
+
 struct Database::Parse::Token {
 	char kind;
-		double value;
-		std::string name;
-		Token(char ch) :kind(ch), value(0) { }
-		Token(char ch, double val) :kind(ch), value(val) { }
-		Token(char ch, std::string n) :kind(ch), name(n) { }
+	double value;
+	std::string name;
+	Token() {}
+	Token(char ch) :kind(ch), value(0) { }
+	Token(char ch, double val) :kind(ch), value(val) { }
+	Token(char ch, std::string n) :kind(ch), name(n) { }
 };
 
+/*
 class Database::Parse::TokenStream {
 	bool isFull;
 		Token buffer;
@@ -65,4 +76,4 @@ class Database::Parse::TokenStream {
 		void unget(Token t) { buffer = t; isFull = true; }
 
 		void ignore(char);
-};
+};	*/
