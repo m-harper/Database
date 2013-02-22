@@ -9,6 +9,7 @@
 #include "Table.h"
 #include <sstream>
 #include <vector>
+#include <iostream>
 
 class DB_API Database {
 private:
@@ -38,12 +39,10 @@ public:
 	/************************************
 	Expression:
 		Term
-		Exression op Term
 		Expression op Term
 
 	Temr:
 		Primary
-		Term op Primary
 		Term op Primary
 
 	Primary:
@@ -52,10 +51,9 @@ public:
 		( Expression )
 
 	************************************/
-	bool expression();
 	bool primary();
 	bool term();
-
+	bool expression();
 private:
 	std::list<std::string> tableNames;
 	std::list<Table> tables;
@@ -80,11 +78,14 @@ public:
 	char kind;
 	double value;
 	std::string name;
-//	token op;
+	bool check;
+	token op;
+	Token() {}
 	Token(char ch) :kind(ch), value(0) { }
 	Token(char ch, double val) :kind(ch), value(val) { }
 	Token(char ch, std::string n) :kind(ch), name(n) { }
-//	Token(char ch, token n) :kind(ch), op(n) {}
+	Token(char ch, bool b) :kind(ch), check(b) {}
+	Token(char ch, token n) :kind(ch), op(n) {}
 };
 
 /*

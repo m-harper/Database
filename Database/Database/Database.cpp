@@ -58,6 +58,65 @@ std::list<std::string> Database::getNames() const {
 	return tableNames;
 }
 
+//---------------------------------------------
+
+int vectorIndex = 0;
+
+bool Database::primary(){
+	Token t;
+	if(!vectorToken.empty())
+		t = vectorToken[vectorIndex];
+	switch (t.kind){
+	case '(':		// handle '(' expression ')'
+		{
+			bool b = expression();
+			t = vectorToken[++vectorIndex];
+			if(t.kind != ')'){
+				std::cout << (" ')' expected\n");
+				exit(1);
+			}
+			return b;
+			break;
+		}
+
+	case '8':
+			return t.value;	break;
+	case 'a':
+		{
+			Token next = vectorToken[++vectorIndex];
+			if(next.kind == 'o'){
+				bool b = expression();
+				
+			}
+
+			break;
+		}
+	case 'o':
+		{
+			break;
+		}
+	default:
+		break;
+
+	return true;
+	}
+}
+
+bool Database::term(){
+
+	return true;
+}
+
+bool Database::expression(){
+	bool left = term();		// read and evaluate a Term
+	Token t = vectorToken[++vectorIndex];
+	return true;
+}
+
+
+
+//---------------------------------------------
+
 Table Database::query(std::list<std::string> _tableAttributes, std::string _tableName, std::string _where) {
 	
 	// Access the old table based on _tableName
