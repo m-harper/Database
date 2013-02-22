@@ -35,6 +35,27 @@ public:
 
 	std::vector<Token> vectorToken;
 
+	/************************************
+	Expression:
+		Term
+		Exression op Term
+		Expression op Term
+
+	Temr:
+		Primary
+		Term op Primary
+		Term op Primary
+
+	Primary:
+		Number
+		Attribute
+		( Expression )
+
+	************************************/
+	bool expression();
+	bool primary();
+	bool term();
+
 private:
 	std::list<std::string> tableNames;
 	std::list<Table> tables;
