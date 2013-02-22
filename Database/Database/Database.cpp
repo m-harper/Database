@@ -62,15 +62,18 @@ std::list<std::string> Database::getNames() const {
 
 int vectorIndex = 0;
 
+// Deal with numbers, attributes, and parenthesis
 bool Database::primary(){
+
 	Token t;
 	if(!vectorToken.empty())
 		t = vectorToken[vectorIndex];
+
 	switch (t.kind){
-	case '(':		// handle '(' expression ')'
+	case '(':	// handle '(' expression ')'
 		{
 			bool b = expression();
-			t = vectorToken[++vectorIndex];
+			t = vectorToken[++vectorIndex]; // Not sure if equivalent to get() in calculator example.
 			if(t.kind != ')'){
 				std::cout << (" ')' expected\n");
 				exit(1);
@@ -79,46 +82,134 @@ bool Database::primary(){
 			break;
 		}
 
-	case '8':
-			return t.value;	break;
-	case 'a':
+	case TOKEN_KIND_NUM:
+		// This returns a double typecased as a bool. Is this right?
+		return t.value;	break;
+	case TOKEN_KIND_ATT:
 		{
-			Token next = vectorToken[++vectorIndex];
-			if(next.kind == 'o'){
-				bool b = expression();
-				
-			}
-
-			break;
-		}
-	case 'o':
-		{
-			break;
+			// Sujin, I saw what you tried to here, but that handles
+			// the assignment and usage of variables. We don't need this.
+			// Example: "x = 10" will asign 10 to x.
+			// Example: "x" will just return the value of x.
 		}
 	default:
+		// Error: primary expected
 		break;
+	}
 
 	return true;
-	}
 }
 
 bool Database::term(){
 
-	return true;
+	bool left = primary(); // Read and evaluate a primary
+	Token t;
+	if(!vectorToken.empty())
+		t = vectorToken[vectorIndex];
+
+	while(true) {
+		switch(t.kind) {
+		case TOKEN_KIND_OP:
+			if (t.op == eq) {
+				left = ( left == primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == neq) {
+				left = ( left != primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == lt) {
+				left = ( left < primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == lte) {
+				left = ( left <= primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == gt) {
+				left = ( left > primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == gte) {
+				left = ( left >= primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == and) {
+				left = ( left && primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == or) {
+				left = ( left || primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == not) {
+				left = ( !left );
+				t = vectorToken[++vectorIndex];
+				break;
+			}
+		default:
+			return left;
+		}
+	}
 }
 
 bool Database::expression(){
-	bool left = term();		// read and evaluate a Term
-	Token t = vectorToken[++vectorIndex];
-	return true;
+
+	bool left = term(); // Read and evaluate a term.
+	Token t;
+	if(!vectorToken.empty())
+		t = vectorToken[vectorIndex];
+
+	while(true) {
+		switch(t.kind) {
+		case TOKEN_KIND_OP:
+			if (t.op == eq) {
+				left = ( left == primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == neq) {
+				left = ( left != primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == lt) {
+				left = ( left < primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == lte) {
+				left = ( left <= primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == gt) {
+				left = ( left > primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == gte) {
+				left = ( left >= primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == and) {
+				left = ( left && primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == or) {
+				left = ( left || primary());
+				t = vectorToken[++vectorIndex];
+				break;
+			} else if (t.op == not) {
+				left = ( !left );
+				t = vectorToken[++vectorIndex];
+				break;
+			}
+		default:
+			return left;
+		}
+	}
 }
-
-
 
 //---------------------------------------------
 
 Table Database::query(std::list<std::string> _tableAttributes, std::string _tableName, std::string _where) {
-	
+
 	// Access the old table based on _tableName
 	Table oldTable;
 	std::list<Table>::iterator tableIterator = tables.begin();
@@ -173,7 +264,7 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 	// Loop through records of old table and extract records whose condition matches
 	// First, get the entry number of the attribute in the record
 	// TODO
-	
+
 	// parsing _where
 
 	// vector for storing word parsed from _where
@@ -201,121 +292,121 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 			vectorToken.push_back('(');
 		else if(vectorString[i] == ")")
 			vectorToken.push_back(')');
-		
+
 		// op Token
 		else if(vectorString[i] == "="){
-			Database::Token t('o', eq);
+			Database::Token t(TOKEN_KIND_OP, eq);
 			vectorToken.push_back(t);
 		}
 		else if(vectorString[i] == "!="){
-			Database::Token t('o', neq);
+			Database::Token t(TOKEN_KIND_OP, neq);
 			vectorToken.push_back(t);
 		}
 		else if(vectorString[i] == "<"){
-			Database::Token t('o', lt);
+			Database::Token t(TOKEN_KIND_OP, lt);
 			vectorToken.push_back(t);
 		}
 		else if(vectorString[i] == "<="){
-			Database::Token t('o', lte);
+			Database::Token t(TOKEN_KIND_OP, lte);
 			vectorToken.push_back(t);
 		}
 		else if(vectorString[i] == ">"){
-			Database::Token t('o', gt);
+			Database::Token t(TOKEN_KIND_OP, gt);
 			vectorToken.push_back(t);
 		}
 		else if(vectorString[i] == ">="){
-			Database::Token t('o', gte);
+			Database::Token t(TOKEN_KIND_OP, gte);
 			vectorToken.push_back(t);
 		}
 		else if(vectorString[i] == "AND"){
-			Database::Token t('o', and);
+			Database::Token t(TOKEN_KIND_OP, and);
 			vectorToken.push_back(t);
 		}
 		else if(vectorString[i] == "OR"){
-			Database::Token t('o', or);
+			Database::Token t(TOKEN_KIND_OP, or);
 			vectorToken.push_back(t);
 		}
 		else if(vectorString[i] == "NOT"){
-			Database::Token t('o', not);
+			Database::Token t(TOKEN_KIND_OP, not);
 			vectorToken.push_back(t);
 		}
-		
+
 		// Determine number of attribute
 		else{
-		
+
 			// number token
 			bool isNum = true;
 			double d = stringToDouble(vectorString[i]);
 			if(!isdigit(d)){
 				isNum = false;
 			}
-		
+
 			if(isNum){
-				Database::Token t('8', d);
+				Database::Token t(TOKEN_KIND_NUM, d);
 				vectorToken.push_back(t);
 			}
 			else{
 				// attribute token
-				Database::Token t('a', vectorString[i]);
+				Database::Token t(TOKEN_KIND_ATT, vectorString[i]);
 				vectorToken.push_back(t);
 			}
 		}
 	}
 
 	/*	std::string attName = // attribute name from _where
-		int index = 0;
-		for (std::list<std::string>::iterator it = oldTable.getAttributes().begin(); it != oldTable.getAttributes().end(); it++) {
-			// Attributes are of the form "type name"
-			// Extract the name only
-			std::string name = (*it).substr((*it).find(" ") + 1);
-			if (name == attName) {
-				// Found the correct entry number
-				break;
-			}
-			index++;
-		}
-	
-		// The operation from _where is stored in a token called op
-		Token op; // TODO assign based on parsing
+	int index = 0;
+	for (std::list<std::string>::iterator it = oldTable.getAttributes().begin(); it != oldTable.getAttributes().end(); it++) {
+	// Attributes are of the form "type name"
+	// Extract the name only
+	std::string name = (*it).substr((*it).find(" ") + 1);
+	if (name == attName) {
+	// Found the correct entry number
+	break;
+	}
+	index++;
+	}
 
-		// Now we know the entry number, begin comparing to condition from _where
-		for (std::list<Record>::iterator recordIter = oldTable.getRecords().begin(); recordIter != oldTable.getRecords.end(); recordIter++) {
-			std::string entry = (*recordIter).retrieveRecordEntry(index);
-			switch (op) {
-			case eq:
-				if (entry == // TODO value from where) {
+	// The operation from _where is stored in a token called op
+	Token op; // TODO assign based on parsing
 
-				}
-				break;
-			case neq:
-				if (entry != // TODO value from where) {
+	// Now we know the entry number, begin comparing to condition from _where
+	for (std::list<Record>::iterator recordIter = oldTable.getRecords().begin(); recordIter != oldTable.getRecords.end(); recordIter++) {
+	std::string entry = (*recordIter).retrieveRecordEntry(index);
+	switch (op) {
+	case eq:
+	if (entry == // TODO value from where) {
 
-				}
-				break;
-			case lt:
-				if (stringToDouble(entry) < stringToDouble(// TODO value from where)) {
+	}
+	break;
+	case neq:
+	if (entry != // TODO value from where) {
 
-				}
-				break;
-			case lte:
-				if (stringToDouble(entry) <= stringToDouble(// TODO value from where)) {
+	}
+	break;
+	case lt:
+	if (stringToDouble(entry) < stringToDouble(// TODO value from where)) {
 
-				}
-				break;
-			case gt:
-				if (stringToDouble(entry) > stringToDouble(// TODO value from where)) {
+	}
+	break;
+	case lte:
+	if (stringToDouble(entry) <= stringToDouble(// TODO value from where)) {
 
-				}
-				break;
-			case gte:
-				if (stringToDouble(entry) >= stringToDouble(// TODO value from where)) {
+	}
+	break;
+	case gt:
+	if (stringToDouble(entry) > stringToDouble(// TODO value from where)) {
 
-				}
-				break;
-			}
-		}
-		*/
-	
+	}
+	break;
+	case gte:
+	if (stringToDouble(entry) >= stringToDouble(// TODO value from where)) {
+
+	}
+	break;
+	}
+	}
+	*/
+
 
 	return newTable;
 }

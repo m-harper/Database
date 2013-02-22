@@ -6,6 +6,11 @@
 #define DB_API __declspec(dllimport) 
 #endif
 
+#define TOKEN_KIND_OP 'o'
+#define TOKEN_KIND_NUM '8'
+#define TOKEN_KIND_ATT 'a'
+
+
 #include "Table.h"
 #include <sstream>
 #include <vector>
@@ -41,7 +46,7 @@ public:
 		Term
 		Expression op Term
 
-	Temr:
+	Term:
 		Primary
 		Term op Primary
 
