@@ -49,11 +49,11 @@ public:
 
 };*/
 
-
+/*
 const char attribute = 'a';		// t.kind == attribute means t is attribute
 const char op = 'o';			// t.kind == op means t is an operator
 const char number = '8';		// t.kind == number means t is a number
-
+*/
 class Database::Token {
 public:
 	char kind;

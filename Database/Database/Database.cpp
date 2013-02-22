@@ -145,34 +145,61 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 		
 		// op Token
 		else if(vectorString[i] == "="){
-			vectorToken.push_back('o', eq);
+			Database::Token t('o', eq);
+			vectorToken.push_back(t);
 		}
-		else if(vectorString[i] == "!=")
-			vectorToken.push_back('o', neq);
-		else if(vectorString[i] == "<")
-			vectorToken.push_back('o', lt);
-		else if(vectorString[i] == "<=")
-			vectorToken.push_back('o', lte);
-		else if(vectorString[i] == ">")
-			vectorToken.push_back('o', gt);
-		else if(vectorString[i] == ">=")
-			vectorToken.push_back('o', gte);
-		else if(vectorString[i] == "AND")
-			vectorToken.push_back('o', and);
-		else if(vectorString[i] == "OR")
-			vectorToken.push_back('o', or);
-		else if(vectorString[i] == "NOT")
-			vectorToken.push_back('o', not);
-
-		// number token
-		else if(isdigit(vectorString[i])){
-			double d = stringToDouble(vectorString[i]);
-			vectorToken.push_back('8', d);
+		else if(vectorString[i] == "!="){
+			Database::Token t('o', neq);
+			vectorToken.push_back(t);
 		}
-
-		// attribute token
+		else if(vectorString[i] == "<"){
+			Database::Token t('o', lt);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == "<="){
+			Database::Token t('o', lte);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == ">"){
+			Database::Token t('o', gt);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == ">="){
+			Database::Token t('o', gte);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == "AND"){
+			Database::Token t('o', and);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == "OR"){
+			Database::Token t('o', or);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == "NOT"){
+			Database::Token t('o', not);
+			vectorToken.push_back(t);
+		}
+		
+		// Determine number of attribute
 		else{
-			vectorToken.push_back('a', vectorString[i]);
+		
+			// number token
+			bool isNum = true;
+			double d = stringToDouble(vectorString[i]);
+			if(!isdigit(d)){
+				isNum = false;
+			}
+		
+			if(isNum){
+				Database::Token t('8', d);
+				vectorToken.push_back(t);
+			}
+			else{
+				// attribute token
+				Database::Token t('a', vectorString[i]);
+				vectorToken.push_back(t);
+			}
 		}
 	}
 
