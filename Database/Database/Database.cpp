@@ -63,148 +63,7 @@ std::list<std::string> Database::getNames() const {
 int vectorIndex = 0;
 
 // Deal with numbers, attributes, and parenthesis
-bool Database::primary(){
 
-	Token t;
-	if(!vectorToken.empty())
-		t = vectorToken[vectorIndex];
-
-	switch (t.kind){
-	case '(':	// handle '(' expression ')'
-		{
-			bool b = expression();
-			t = vectorToken[++vectorIndex]; // Not sure if equivalent to get() in calculator example.
-			if(t.kind != ')'){
-				std::cout << (" ')' expected\n");
-				exit(1);
-			}
-			return b;
-			break;
-		}
-
-	case TOKEN_KIND_NUM:
-		// This returns a double typecased as a bool. Is this right?
-		return t.value;	break;
-	case TOKEN_KIND_ATT:
-		{
-			// Sujin, I saw what you tried to here, but that handles
-			// the assignment and usage of variables. We don't need this.
-			// Example: "x = 10" will asign 10 to x.
-			// Example: "x" will just return the value of x.
-		}
-	default:
-		// Error: primary expected
-		break;
-	}
-
-	return true;
-}
-
-bool Database::term(){
-
-	bool left = primary(); // Read and evaluate a primary
-	Token t;
-	if(!vectorToken.empty())
-		t = vectorToken[vectorIndex];
-
-	while(true) {
-		switch(t.kind) {
-		case TOKEN_KIND_OP:
-			if (t.op == eq) {
-				left = ( left == primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == neq) {
-				left = ( left != primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == lt) {
-				left = ( left < primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == lte) {
-				left = ( left <= primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == gt) {
-				left = ( left > primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == gte) {
-				left = ( left >= primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == and) {
-				left = ( left && primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == or) {
-				left = ( left || primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == not) {
-				left = ( !left );
-				t = vectorToken[++vectorIndex];
-				break;
-			}
-		default:
-			return left;
-		}
-	}
-}
-
-bool Database::expression(){
-
-	bool left = term(); // Read and evaluate a term.
-	Token t;
-	if(!vectorToken.empty())
-		t = vectorToken[vectorIndex];
-
-	while(true) {
-		switch(t.kind) {
-		case TOKEN_KIND_OP:
-			if (t.op == eq) {
-				left = ( left == primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == neq) {
-				left = ( left != primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == lt) {
-				left = ( left < primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == lte) {
-				left = ( left <= primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == gt) {
-				left = ( left > primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == gte) {
-				left = ( left >= primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == and) {
-				left = ( left && primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == or) {
-				left = ( left || primary());
-				t = vectorToken[++vectorIndex];
-				break;
-			} else if (t.op == not) {
-				left = ( !left );
-				t = vectorToken[++vectorIndex];
-				break;
-			}
-		default:
-			return left;
-		}
-	}
-}
 
 //---------------------------------------------
 
@@ -319,38 +178,23 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 			vectorToken.push_back(t);
 		}
 		else if(vectorString[i] == "AND"){
-			Database::Token t(TOKEN_KIND_OP, and);
+			Database::Token t(TOKEN_KIND_LOG, and);
 			vectorToken.push_back(t);
 		}
 		else if(vectorString[i] == "OR"){
-			Database::Token t(TOKEN_KIND_OP, or);
+			Database::Token t(TOKEN_KIND_LOG, or);
 			vectorToken.push_back(t);
 		}
 		else if(vectorString[i] == "NOT"){
-			Database::Token t(TOKEN_KIND_OP, not);
+			Database::Token t(TOKEN_KIND_LOG, not);
+			vectorToken.push_back(t);
+		}
+		else{
+			// attribute token
+			Database::Token t(TOKEN_KIND_ATT, vectorString[i]);
 			vectorToken.push_back(t);
 		}
 
-		// Determine number of attribute
-		else{
-
-			// number token
-			bool isNum = true;
-			double d = stringToDouble(vectorString[i]);
-			if(!isdigit(d)){
-				isNum = false;
-			}
-
-			if(isNum){
-				Database::Token t(TOKEN_KIND_NUM, d);
-				vectorToken.push_back(t);
-			}
-			else{
-				// attribute token
-				Database::Token t(TOKEN_KIND_ATT, vectorString[i]);
-				vectorToken.push_back(t);
-			}
-		}
 	}
 
 	/*	std::string attName = // attribute name from _where
@@ -407,6 +251,18 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 	}
 	*/
 
+	std::list<Record> oldRecords = oldTable.getRecords();
+
+	for(std::list<Record>::iterator i = oldRecords.begin(); i != oldRecords.end(); i++){
+		Record oldRecord = *i;
+		bool result;
+
+		result = doesRecordPass(oldTable.getAttributes(), oldRecord, vectorToken);
+
+
+		if (result == true)
+			newTable.insertRecord(oldRecord);
+	}
 
 	return newTable;
 }
@@ -438,3 +294,156 @@ double Database::stringToDouble(std::string _string) {
 	return result;
 }
 
+bool Database::doesRecordPass(std::list<std::string> attributes, Record record, std::vector<Token> vectorToken){
+	for(int i = 0; i < vectorToken.size(); i++){
+		Token token = vectorToken[i];
+		std::vector<Token> newVectorToken;
+		switch(token.kind) {
+		case '(':
+			{
+				newVectorToken.clear();
+				int parenthesisTracker = 0;
+				for (int j = i + 1; i < vectorToken.size(); j++) {
+
+					// If there is another opening parenthesis nested within our case.
+					if (vectorToken[j].kind == '(') {
+						parenthesisTracker++;
+						newVectorToken.push_back(vectorToken[j]);
+					}
+					// If we encounter a closing parenthesis in our case.
+					else if (vectorToken[j].kind == ')') {
+						parenthesisTracker--;
+						// If the closing parenthesis is not nested, execute what's within the parentheisis.
+						if (parenthesisTracker == 0) {
+							bool result1 = doesRecordPass(attributes, record, newVectorToken);
+							j++;
+							// If there is more past closing parenthesis
+							if (j < vectorToken.size()) {
+								Token logicToken = vectorToken[j];
+								j++;
+								newVectorToken.clear();
+								while(j < vectorToken.size()) {
+									newVectorToken.push_back(vectorToken[j]);
+									j++;
+								}
+								bool result2 = doesRecordPass(attributes, record, newVectorToken);
+								bool finalResult;
+								switch (logicToken.op) {
+								case token::and:
+									finalResult = (result1 && result2);
+									break;
+								case token::or:
+									finalResult = (result1 || result2);
+									break;
+								}
+								return finalResult;							
+							} 
+							// If not, just return result from parenthesis.
+							else {
+								return result1;
+							}
+						}
+						// If the closing parenthesis is nested. (parenthesisTracker != 0)
+						else
+							newVectorToken.push_back(vectorToken[j]);
+					}
+					// Otherwise, it's any other token
+					else {
+						vectorToken.push_back(vectorToken[j]);
+					}
+				}
+			}
+			break;
+		case TOKEN_KIND_ATT:
+			
+
+			break;
+		case TOKEN_KIND_LOG:
+			{
+				newVectorToken.clear();
+				i++;
+				Token token = vectorToken[i];
+				switch (token.kind) {
+				case '(':
+					newVectorToken.push_back('(');
+					int parenthesisTracker = 1;
+					i++;
+					while(parenthesisTracker != 0){
+						if(vectorToken[i].kind == '(')
+							parenthesisTracker++;
+						else if(vectorToken[i].kind == ')')
+							parenthesisTracker--;
+						newVectorToken.push_back(vectorToken[i]);
+						i++;
+					}
+					bool result1 = !doesRecordPass(attributes, record, newVectorToken);
+
+					if (i < vectorToken.size()) {
+						Token logicToken = vectorToken[i];
+						i++;
+						newVectorToken.clear();
+						while(i < vectorToken.size()) {
+							newVectorToken.push_back(vectorToken[i]);
+							i++;
+						}
+						bool result2 = doesRecordPass(attributes, record, newVectorToken);
+						bool finalResult;
+						switch (logicToken.op) {
+						case token::and:
+							finalResult = (result1 && result2);
+							break;
+						case token::or:
+							finalResult = (result1 || result2);
+							break;
+						}
+						return finalResult;							
+					} 
+					// If not, just return result from parenthesis.
+					else {
+						return result1;
+					}
+					break;
+				
+				case TOKEN_KIND_ATT:
+					newVectorToken.clear();
+					newVectorToken.push_back(vectorToken[i]);
+					newVectorToken.push_back(vectorToken[i+1]);
+					newVectorToken.push_back(vectorToken[i+2]);
+					i += 3;
+					bool result1 = !doesRecordPass(attributes, record, newVectorToken);
+
+					if (i < vectorToken.size()) {
+						Token logicToken = vectorToken[i];
+						i++;
+						newVectorToken.clear();
+						while(i < vectorToken.size()) {
+							newVectorToken.push_back(vectorToken[i]);
+							i++;
+						}
+						bool result2 = doesRecordPass(attributes, record, newVectorToken);
+						bool finalResult;
+						switch (logicToken.op) {
+						case token::and:
+							finalResult = (result1 && result2);
+							break;
+						case token::or:
+							finalResult = (result1 || result2);
+							break;
+						}
+						return finalResult;							
+					} 
+					// If not, just return result from parenthesis.
+					else {
+						return result1;
+					}
+					break;
+				}
+			}
+
+			break;
+		default:
+			//throw error;
+			break;
+		}
+	}
+}

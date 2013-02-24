@@ -9,6 +9,8 @@
 #define TOKEN_KIND_OP 'o'
 #define TOKEN_KIND_NUM '8'
 #define TOKEN_KIND_ATT 'a'
+#define TOKEN_KIND_VAL 'v'
+#define TOKEN_KIND_LOG 'l'
 
 
 #include "Table.h"
@@ -37,7 +39,7 @@ public:
 	double stringToDouble(std::string);
 
 	// Parser functions
-	enum token { eq, neq, lt, lte, gt, gte, in, exists, and, or, not, lpar, rpar, all, any, field, num };
+	enum token { eq, neq, lt, lte, gt, gte, in, exists, and, or, not};
 
 	std::vector<Token> vectorToken;
 
@@ -62,6 +64,7 @@ public:
 private:
 	std::list<std::string> tableNames;
 	std::list<Table> tables;
+	bool doesRecordPass(std::list<std::string> attributes, Record record, std::vector<Token> vectorToken);
 };
 
 
