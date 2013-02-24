@@ -39,7 +39,7 @@ public:
 	double stringToDouble(std::string);
 
 	// Parser functions
-	enum token { eq, neq, lt, lte, gt, gte, in, exists, and, or, not};
+	enum token { eq, neq, lt, lte, gt, gte, and, or, not};
 
 	std::vector<Token> vectorToken;
 

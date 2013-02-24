@@ -355,8 +355,50 @@ bool Database::doesRecordPass(std::list<std::string> attributes, Record record, 
 			}
 			break;
 		case TOKEN_KIND_ATT:
-			
+			{
+				int index = 0;
+				for (std::list<std::string>::iterator attIter = attributes.begin(); attIter != attributes.end(); attIter++) {
+					// Attributes are of the form "type name"
+					// Extract the name only
+					std::string name = (*attIter).substr((*attIter).find(" ") + 1);
+					if (name == token.name) {
+						break;
+					} else{
+						++index;
+					}
+				}
 
+				std::string recordValue = record.retrieveRecordEntry(index);
+
+				Token tokenOp = vectorToken[i+1];
+				Token tokenValue = vectorToken[i+2];
+
+				std::string stringValue = tokenValue.name;
+
+				switch (tokenOp.op) {
+				case token::eq:
+					return (recordValue == stringValue);
+					break;
+				case token::neq:
+					return (recordValue != stringValue);
+					break;
+				case token::lt:
+					return (recordValue < stringValue);
+					break;
+				case token::lte:
+					return (recordValue <= stringValue);
+					break;
+				case token::gt:
+					return (recordValue > stringValue);
+					break;
+				case token::gte:
+					return (recordValue >= stringValue);
+					break;
+				default:
+					// You shouldn't be here.
+					break;
+				}
+			}
 			break;
 		case TOKEN_KIND_LOG:
 			{
@@ -365,81 +407,84 @@ bool Database::doesRecordPass(std::list<std::string> attributes, Record record, 
 				Token token = vectorToken[i];
 				switch (token.kind) {
 				case '(':
-					newVectorToken.push_back('(');
-					int parenthesisTracker = 1;
-					i++;
-					while(parenthesisTracker != 0){
-						if(vectorToken[i].kind == '(')
-							parenthesisTracker++;
-						else if(vectorToken[i].kind == ')')
-							parenthesisTracker--;
-						newVectorToken.push_back(vectorToken[i]);
+					{
+						newVectorToken.push_back('(');
+						int parenthesisTracker = 1;
 						i++;
-					}
-					bool result1 = !doesRecordPass(attributes, record, newVectorToken);
-
-					if (i < vectorToken.size()) {
-						Token logicToken = vectorToken[i];
-						i++;
-						newVectorToken.clear();
-						while(i < vectorToken.size()) {
+						while(parenthesisTracker != 0){
+							if(vectorToken[i].kind == '(')
+								parenthesisTracker++;
+							else if(vectorToken[i].kind == ')')
+								parenthesisTracker--;
 							newVectorToken.push_back(vectorToken[i]);
 							i++;
 						}
-						bool result2 = doesRecordPass(attributes, record, newVectorToken);
-						bool finalResult;
-						switch (logicToken.op) {
-						case token::and:
-							finalResult = (result1 && result2);
-							break;
-						case token::or:
-							finalResult = (result1 || result2);
-							break;
+						bool result1 = !doesRecordPass(attributes, record, newVectorToken);
+
+						if (i < vectorToken.size()) {
+							Token logicToken = vectorToken[i];
+							i++;
+							newVectorToken.clear();
+							while(i < vectorToken.size()) {
+								newVectorToken.push_back(vectorToken[i]);
+								i++;
+							}
+							bool result2 = doesRecordPass(attributes, record, newVectorToken);
+							bool finalResult;
+							switch (logicToken.op) {
+							case token::and:
+								finalResult = (result1 && result2);
+								break;
+							case token::or:
+								finalResult = (result1 || result2);
+								break;
+							}
+							return finalResult;							
+						} 
+						// If not, just return result from parenthesis.
+						else {
+							return result1;
 						}
-						return finalResult;							
-					} 
-					// If not, just return result from parenthesis.
-					else {
-						return result1;
 					}
 					break;
-				
+
 				case TOKEN_KIND_ATT:
-					newVectorToken.clear();
-					newVectorToken.push_back(vectorToken[i]);
-					newVectorToken.push_back(vectorToken[i+1]);
-					newVectorToken.push_back(vectorToken[i+2]);
-					i += 3;
-					bool result1 = !doesRecordPass(attributes, record, newVectorToken);
-
-					if (i < vectorToken.size()) {
-						Token logicToken = vectorToken[i];
-						i++;
+					{
 						newVectorToken.clear();
-						while(i < vectorToken.size()) {
-							newVectorToken.push_back(vectorToken[i]);
+						newVectorToken.push_back(vectorToken[i]);
+						newVectorToken.push_back(vectorToken[i+1]);
+						newVectorToken.push_back(vectorToken[i+2]);
+						i += 3;
+						bool result1 = !doesRecordPass(attributes, record, newVectorToken);
+
+						if (i < vectorToken.size()) {
+							Token logicToken = vectorToken[i];
 							i++;
+							newVectorToken.clear();
+							while(i < vectorToken.size()) {
+								newVectorToken.push_back(vectorToken[i]);
+								i++;
+							}
+							bool result2 = doesRecordPass(attributes, record, newVectorToken);
+							bool finalResult;
+							switch (logicToken.op) {
+							case token::and:
+								finalResult = (result1 && result2);
+								break;
+							case token::or:
+								finalResult = (result1 || result2);
+								break;
+							}
+							return finalResult;							
+						} 
+						// If not, just return result from parenthesis.
+						else {
+							return result1;
 						}
-						bool result2 = doesRecordPass(attributes, record, newVectorToken);
-						bool finalResult;
-						switch (logicToken.op) {
-						case token::and:
-							finalResult = (result1 && result2);
-							break;
-						case token::or:
-							finalResult = (result1 || result2);
-							break;
-						}
-						return finalResult;							
-					} 
-					// If not, just return result from parenthesis.
-					else {
-						return result1;
 					}
-					break;
+						break;
 				}
 			}
-
 			break;
 		default:
 			//throw error;
