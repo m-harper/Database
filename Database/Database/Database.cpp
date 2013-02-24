@@ -58,15 +58,6 @@ std::list<std::string> Database::getNames() const {
 	return tableNames;
 }
 
-//---------------------------------------------
-
-int vectorIndex = 0;
-
-// Deal with numbers, attributes, and parenthesis
-
-
-//---------------------------------------------
-
 Table Database::query(std::list<std::string> _tableAttributes, std::string _tableName, std::string _where) {
 
 	// Access the old table based on _tableName
@@ -197,60 +188,8 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 
 	}
 
-	/*	std::string attName = // attribute name from _where
-	int index = 0;
-	for (std::list<std::string>::iterator it = oldTable.getAttributes().begin(); it != oldTable.getAttributes().end(); it++) {
-	// Attributes are of the form "type name"
-	// Extract the name only
-	std::string name = (*it).substr((*it).find(" ") + 1);
-	if (name == attName) {
-	// Found the correct entry number
-	break;
-	}
-	index++;
-	}
-
-	// The operation from _where is stored in a token called op
-	Token op; // TODO assign based on parsing
-
-	// Now we know the entry number, begin comparing to condition from _where
-	for (std::list<Record>::iterator recordIter = oldTable.getRecords().begin(); recordIter != oldTable.getRecords.end(); recordIter++) {
-	std::string entry = (*recordIter).retrieveRecordEntry(index);
-	switch (op) {
-	case eq:
-	if (entry == // TODO value from where) {
-
-	}
-	break;
-	case neq:
-	if (entry != // TODO value from where) {
-
-	}
-	break;
-	case lt:
-	if (stringToDouble(entry) < stringToDouble(// TODO value from where)) {
-
-	}
-	break;
-	case lte:
-	if (stringToDouble(entry) <= stringToDouble(// TODO value from where)) {
-
-	}
-	break;
-	case gt:
-	if (stringToDouble(entry) > stringToDouble(// TODO value from where)) {
-
-	}
-	break;
-	case gte:
-	if (stringToDouble(entry) >= stringToDouble(// TODO value from where)) {
-
-	}
-	break;
-	}
-	}
-	*/
-
+	// Finally going through records and pulling out the ones where
+	// the condition from _where matches.
 	std::list<Record> oldRecords = oldTable.getRecords();
 
 	for(std::list<Record>::iterator i = oldRecords.begin(); i != oldRecords.end(); i++){
@@ -268,6 +207,7 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 }
 
 void Database::deleteRecord(std::string _tableName, std::string _where) {
+
 	// Find the index of the _tableName
 	int index = 0;
 	for (std::list<std::string>::iterator it = tableNames.begin(); it != tableNames.end(); it++) {
@@ -283,8 +223,92 @@ void Database::deleteRecord(std::string _tableName, std::string _where) {
 		it++;
 	}
 
+	Table theTable = *it;
+
 	// In the table, delete the record defined by the where statement
-	//TODO parse where
+	// parsing _where
+
+	// vector for storing word parsed from _where
+	std::vector<std::string> vectorString;
+
+	std::string::iterator it1 = _where.begin();
+
+	while(it1 != _where.end()){
+		std::string word = "";
+		while((it1 != _where.end()) && (*it1 != ' ')){
+			word += *it1;
+			++it1;
+		}
+		if(it1 != _where.end()){
+			++it1;
+		}
+		vectorString.push_back(word);
+	}
+
+	// Convert from word to Token
+	for(int i = 0; i < vectorString.size(); i++){
+
+		// parentheses
+		if(vectorString[i] == "(")
+			vectorToken.push_back('(');
+		else if(vectorString[i] == ")")
+			vectorToken.push_back(')');
+
+		// op Token
+		else if(vectorString[i] == "="){
+			Database::Token t(TOKEN_KIND_OP, eq);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == "!="){
+			Database::Token t(TOKEN_KIND_OP, neq);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == "<"){
+			Database::Token t(TOKEN_KIND_OP, lt);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == "<="){
+			Database::Token t(TOKEN_KIND_OP, lte);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == ">"){
+			Database::Token t(TOKEN_KIND_OP, gt);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == ">="){
+			Database::Token t(TOKEN_KIND_OP, gte);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == "AND"){
+			Database::Token t(TOKEN_KIND_LOG, and);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == "OR"){
+			Database::Token t(TOKEN_KIND_LOG, or);
+			vectorToken.push_back(t);
+		}
+		else if(vectorString[i] == "NOT"){
+			Database::Token t(TOKEN_KIND_LOG, not);
+			vectorToken.push_back(t);
+		}
+		else{
+			// attribute token
+			Database::Token t(TOKEN_KIND_ATT, vectorString[i]);
+			vectorToken.push_back(t);
+		}
+	}
+
+	// Finally going through records and pulling out the ones where
+	// the condition from _where matches.
+	std::list<Record> theRecords = theTable.getRecords();
+
+	for(std::list<Record>::iterator i = theRecords.begin(); i != theRecords.end(); i++){
+		Record theRecord = *i;
+		bool result = doesRecordPass(theTable.getAttributes(), theRecord, vectorToken);
+
+		if (result)
+			theRecords.erase(i);
+	}
 }
 
 double Database::stringToDouble(std::string _string) {
@@ -375,28 +399,61 @@ bool Database::doesRecordPass(std::list<std::string> attributes, Record record, 
 
 				std::string stringValue = tokenValue.name;
 
-				switch (tokenOp.op) {
-				case token::eq:
-					return (recordValue == stringValue);
-					break;
-				case token::neq:
-					return (recordValue != stringValue);
-					break;
-				case token::lt:
-					return (recordValue < stringValue);
-					break;
-				case token::lte:
-					return (recordValue <= stringValue);
-					break;
-				case token::gt:
-					return (recordValue > stringValue);
-					break;
-				case token::gte:
-					return (recordValue >= stringValue);
-					break;
-				default:
-					// You shouldn't be here.
-					break;
+				bool isNum = true;
+				double d1 = stringToDouble(recordValue);
+				double d2 = stringToDouble(stringValue);
+				if(!isdigit(d1) && !isdigit(d2)){
+					isNum = false;
+				}
+
+				if(isNum){ 
+					switch (tokenOp.op) {
+					case token::eq:
+						return (d1 == d2);
+						break;
+					case token::neq:
+						return (d1 != d2);
+						break;
+					case token::lt:
+						return (d1 < d2);
+						break;
+					case token::lte:
+						return (d1 <= d2);
+						break;
+					case token::gt:
+						return (d1 > d2);
+						break;
+					case token::gte:
+						return (d1 >= d2);
+						break;
+					default:
+						// You shouldn't be here.
+						break;
+					}
+				} else {
+					switch (tokenOp.op) {
+					case token::eq:
+						return (recordValue == stringValue);
+						break;
+					case token::neq:
+						return (recordValue != stringValue);
+						break;
+					case token::lt:
+						return (recordValue < stringValue);
+						break;
+					case token::lte:
+						return (recordValue <= stringValue);
+						break;
+					case token::gt:
+						return (recordValue > stringValue);
+						break;
+					case token::gte:
+						return (recordValue >= stringValue);
+						break;
+					default:
+						// You shouldn't be here.
+						break;
+					}
 				}
 			}
 			break;
@@ -482,12 +539,11 @@ bool Database::doesRecordPass(std::list<std::string> attributes, Record record, 
 							return result1;
 						}
 					}
-						break;
+					break;
 				}
 			}
 			break;
 		default:
-			//throw error;
 			break;
 		}
 	}
