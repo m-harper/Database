@@ -9,18 +9,28 @@ Table::Table() {
 Table::Table(const Table& _table) {
 	// Need to copy in records, fields, and types
 	// Copy records
-	for (list<Record>::iterator it = _table.getRecords().begin(); it != _table.getRecords().end(); it++) {
+	int cnt = _table.getRecords().size();
+	list<Record>::iterator it = _table.getRecords().begin();
+	for(int i = 0; i < cnt; ++i)
+	{
 		records.push_back(*it);
+		it++;
 	}
-
+	
 	// Copy fields
-	for (list<std::string>::iterator it = _table.getFields().begin(); it != _table.getFields().end(); it++) {
-		fields.push_back(*it);
+	cnt = _table.getFields().size();
+	list<std::string>::iterator fit = _table.getFields().begin();
+	for (int i = 0; i < cnt; i++) {
+		fields.push_back(*fit);
+		fit++;
 	}
 
 	// Copy types
-	for (list<Type>::iterator it = _table.getTypes().begin(); it != _table.getTypes().end(); it++) {
-		types.push_back(*it);
+	cnt = _table.getTypes().size();
+	list<Type>::iterator tit = _table.getTypes().begin();
+	for (int i = 0; i < cnt; i++) {
+		types.push_back(*tit);
+		tit++;
 	}
 }
 
