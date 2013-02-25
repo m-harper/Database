@@ -195,14 +195,10 @@ Table Database::query(std::list<std::string> _tableAttributes, std::string _tabl
 	for(std::list<Record>::iterator i = oldRecords.begin(); i != oldRecords.end(); i++){
 		Record oldRecord = *i;
 		bool result;
-
 		result = doesRecordPass(oldTable.getAttributes(), oldRecord, vectorToken);
-
-
 		if (result == true)
 			newTable.insertRecord(oldRecord);
 	}
-
 	return newTable;
 }
 
@@ -302,7 +298,8 @@ void Database::deleteRecord(std::string _tableName, std::string _where) {
 	// the condition from _where matches.
 	std::list<Record> theRecords = theTable.getRecords();
 
-	for(std::list<Record>::iterator i = theRecords.begin(); i != theRecords.end(); i++){
+	for(std::list<Record>::iterator i = theRecords.end(); i != theRecords.begin();){
+		i--;
 		Record theRecord = *i;
 		bool result = doesRecordPass(theTable.getAttributes(), theRecord, vectorToken);
 

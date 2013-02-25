@@ -1,11 +1,8 @@
-#pragma once
-
 #include "Record.h"
-#include <sstream>
+#ifndef TABLE_H
+#define TABLE_H
 
-
-
-class Table {	
+class __declspec(dllexport) Table {	
 public:
 	enum Type {INT, FLOAT, string, DATE};
 
@@ -37,3 +34,5 @@ private:
 	std::list<Record> records;
 	std::list<Type> types; // Used to keep track of the data types of records
 };
+
+#endif

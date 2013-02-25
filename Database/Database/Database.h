@@ -1,10 +1,6 @@
-#pragma once
-
-#ifdef DB_EXPORTS
-#define DB_API __declspec(dllexport) 
-#else
-#define DB_API __declspec(dllimport) 
-#endif
+#include "Table.h"
+#ifndef DATABASE_H
+#define DATABASE_H
 
 #define TOKEN_KIND_OP 'o'
 #define TOKEN_KIND_NUM '8'
@@ -12,13 +8,7 @@
 #define TOKEN_KIND_VAL 'v'
 #define TOKEN_KIND_LOG 'l'
 
-
-#include "Table.h"
-#include <sstream>
-#include <vector>
-#include <iostream>
-
-class DB_API Database {
+class __declspec(dllexport)  Database {
 private:
 	class Token;
 
@@ -39,9 +29,6 @@ public:
 	// Parser functions
 	enum token { eq, neq, lt, lte, gt, gte, and, or, not};
 	std::vector<Token> vectorToken;
-	bool primary();
-	bool term();
-	bool expression();
 
 private:
 	std::list<std::string> tableNames;
@@ -63,3 +50,5 @@ public:
 	Token(char ch, bool b) :kind(ch), check(b) {}
 	Token(char ch, token n) :kind(ch), op(n) {}
 };
+
+#endif
