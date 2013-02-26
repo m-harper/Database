@@ -54,7 +54,7 @@ bool Customer_Reader::read_customers(Database& _db) {
 				break;
 			cout << info_token << '\t';
 			// Add the info to a vector to initialize the record with
-			rec_vec.push_back(info);
+			rec_vec.push_back(info_token);
 		}
 		// Create a record
 		Record record = Record(rec_vec);
@@ -66,7 +66,7 @@ bool Customer_Reader::read_customers(Database& _db) {
 	assert(table.getSize() == 138);
 	
 	// Add the table to the database
-	_db.addTable(table, "Customers");
+	_db.addTable(customers, "Customers");
 
 	users.close();
 	return true;
@@ -122,7 +122,7 @@ bool Customer_Reader::read_customer_payments(Database& _db) {
 		cout << endl;
 		Record record = Record(rec_vec);
 		// Add the record to the table
-		table.addRecord(record);
+		table.insert(record);
 	}
 	// The table should have EXACTLY 138 records
 	assert(table.getSize() == 138);
@@ -159,7 +159,7 @@ bool Customer_Reader::read_customer_cuisine(Database& _db) {
 	// Tokenize the attributes
 	string attribute = get_token(atts);
 	while (attribute != "") {
-		table.addAttribute(attribute);
+		table.addAttribute(attribute, AttributeList::STRING);
 		cout << attribute << endl;
 		attribute = get_token(atts);
 	}
@@ -183,13 +183,13 @@ bool Customer_Reader::read_customer_cuisine(Database& _db) {
 		cout << endl;
 		Record record = Record(rec_vec);
 		// Add the record to the table
-		table.addRecord(record);
+		table.insert(record);
 	}
 	// The table should have EXACTLY 138 records
 	assert(table.getSize() == 138);
 
 	// Add the table to the database
-	_db.addTable(table);
+	_db.addTable(table, "Cuisine");
 	
 	infile.close();
 	return true;
