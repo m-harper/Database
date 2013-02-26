@@ -5,17 +5,7 @@
 
 using namespace std;
 
-//  Database db;
-
-int main(int argc, char** argv) {
-	Customer_Reader cr;
-	//cr.read_customers();
-	//cr.read_customer_payments();
-	cr.read_customer_cuisine();
-	return 0;
-}
-
-bool Customer_Reader::read_customers() {
+bool Customer_Reader::read_customers(Database& _db) {
 	const char* file_name = "data/userprofile.txt";
 
 	// Open the file
@@ -37,11 +27,11 @@ bool Customer_Reader::read_customers() {
 	string attributes;
 	getline(users, attributes);
 
-	// Table customers;
+	Table customers;
 
 	string token = get_token(attributes);
 	while (token != "") {
-		// customers.add_attribute(token, string);
+		customers.addAttribute(token, AttributeList::STRING);
 		cout << token << endl;
 		token = get_token(attributes);
 	}
@@ -49,39 +39,40 @@ bool Customer_Reader::read_customers() {
 	// Read in the customers' data
 	string customer;
 	string info_token;
-	// Record record;
+
 	// Loop over all of the customers
 	while (true) {
 		getline(users, customer);
 		if (customer == "") {
 			break;
 		}
+		vector<string> rec_vec;
 		while (true) {
 			// Get a token of info from the customer string
 			info_token = get_token(customer);
 			if (info_token == "")
 				break;
 			cout << info_token << '\t';
-			// Add the info to a table record
-			// record.add_entry(info);
+			// Add the info to a vector to initialize the record with
+			rec_vec.push_back(info);
 		}
+		// Create a record
+		Record record = Record(rec_vec);
 		// Add the created record to the table
-		// table.add_record(record)
-		// Reset the temporary record
-		// record = Record();
+		customers.insert(record);
 		cout << '\n';
 	}
 	// There should be EXACTLY 138 customers
-	// assert(table.num_records() == 138);
+	assert(table.getSize() == 138);
 	
 	// Add the table to the database
-	// db.add_table(table, "Customers");
+	_db.addTable(table, "Customers");
 
 	users.close();
 	return true;
 }
 
-bool Customer_Reader::read_customer_payments() {
+bool Customer_Reader::read_customer_payments(Database& _db) {
 	const char* file_name = "data/userpayment.txt";
 
 	cout << "Attempting to open " << file_name << "...";
@@ -99,21 +90,22 @@ bool Customer_Reader::read_customer_payments() {
 	}
 
 	// File has been successfully opened
-	// Table table;
 	// Add attributes to the table
+	Table table;
 	string atts;
 	getline(payments, atts);
+
 	// Tokenize the attributes
 	string attribute = get_token(atts);
 	while (attribute != "") {
-		// table.add_attribute(attribute);
+		table.addAttribute(attribute, AttributeList::STRING);
 		cout << attribute << endl;
 		attribute = get_token(atts);
 	}
 
 	// Loop through the payment info
 	string pay, token;
-	// Record record;
+	vector<string> rec_vec;
 	while (true) {
 		getline(payments, pay);
 		if (pay == "") {
@@ -124,25 +116,24 @@ bool Customer_Reader::read_customer_payments() {
 			if (token == "") {
 				break;
 			}
-			// record.add_entry(token);
+			rec_vec.push_back(token);
 			cout << token << '\t';
 		}
 		cout << endl;
+		Record record = Record(rec_vec);
 		// Add the record to the table
-		// table.add_record(record);
-		// Reset the temp record
-		// record = Record();
+		table.addRecord(record);
 	}
 	// The table should have EXACTLY 138 records
-	// assert(table.num_records() == 138);
+	assert(table.getSize() == 138);
 	// Add the table to the database
-	// db.add_table(table);
+	_db.addTable(table, "Customer Payments");
 	
 	payments.close();
 	return true;
 }
 
-bool Customer_Reader::read_customer_cuisine() {
+bool Customer_Reader::read_customer_cuisine(Database& _db) {
 	const char* file_name = "data/usercuisine.txt";
 	
 	cout << "Attempting to open " << file_name << "...";
@@ -160,21 +151,22 @@ bool Customer_Reader::read_customer_cuisine() {
 	}
 	
 	// File has been successfully opened
-	// Table table;
 	// Add attributes to the table
+	Table table;
 	string atts;
 	getline(infile, atts);
+
 	// Tokenize the attributes
 	string attribute = get_token(atts);
 	while (attribute != "") {
-		// table.add_attribute(attribute);
+		table.addAttribute(attribute);
 		cout << attribute << endl;
 		attribute = get_token(atts);
 	}
 	
 	// Loop through the cuisine info
 	string cuisine, token;
-	// Record record;
+	vector<string> rec_vec;
 	while (true) {
 		getline(infile, cuisine);
 		if (cuisine == "") {
@@ -185,19 +177,19 @@ bool Customer_Reader::read_customer_cuisine() {
 			if (token == "") {
 				break;
 			}
-			// record.add_entry(token);
+			rec_vec.push_back(token);
 			cout << token << '\t';
 		}
 		cout << endl;
+		Record record = Record(rec_vec);
 		// Add the record to the table
-		// table.add_record(record);
-		// Reset the temp record
-		// record = Record();
+		table.addRecord(record);
 	}
 	// The table should have EXACTLY 138 records
-	// assert(table.num_records() == 138);
+	assert(table.getSize() == 138);
+
 	// Add the table to the database
-	// db.add_table(table);
+	_db.addTable(table);
 	
 	infile.close();
 	return true;
