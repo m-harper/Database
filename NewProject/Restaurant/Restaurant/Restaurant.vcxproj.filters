@@ -40,21 +40,21 @@
     <ClInclude Include="Table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="customer_reader.h">
+    <ClInclude Include="mainfunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mainfunctions.h">
+    <ClInclude Include="restaurant_reader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="customer_reader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mainfunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="restaurant_reader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

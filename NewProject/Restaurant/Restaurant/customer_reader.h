@@ -9,6 +9,7 @@ public:
 	bool read_customers(Database&);
 	bool read_customer_payments(Database&);
 	bool read_customer_cuisine(Database&);
+		
 	std::string get_token(std::string&);
 };
 

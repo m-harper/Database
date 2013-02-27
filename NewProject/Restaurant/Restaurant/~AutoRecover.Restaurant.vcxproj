@@ -70,6 +70,7 @@
   <ItemGroup>
     <ClInclude Include="API.h" />
     <ClInclude Include="AttributeList.h" />
+    <ClInclude Include="customer_reader.h" />
     <ClInclude Include="Database.h" />
     <ClInclude Include="mainfunctions.h" />
     <ClInclude Include="Record.h" />
@@ -77,6 +78,7 @@
     <ClInclude Include="Table.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="customer_reader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainfunctions.cpp" />
     <ClCompile Include="restaurant_reader.cpp" />

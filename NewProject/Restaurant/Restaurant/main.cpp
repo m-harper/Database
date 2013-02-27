@@ -12,7 +12,8 @@
 // chefmozaccepts: Contains placeID, and types of payments that resturant accepts.
 
 #include "mainfunctions.h"
-#include "customer_reader.h"
+//#include "customer_reader.h"
+#include "restaurant_reader.h"
 #include "API.h"
 #include <string>
 
@@ -30,8 +31,15 @@ unsigned int commandIndex(std::string a) {
 
 int main() {
 	Database db;
-	Customer_Reader cr;
+	//Customer_Reader cr;
+	Restaurant_Reader rr;
 
+	rr.read_all(db);
+	
+	string x;
+	cin >> x;
+
+	/*
 	// Add table "Customers" to database
 	cr.read_customers(db);
 
@@ -40,6 +48,7 @@ int main() {
 
 	// Add table "Customer Cuisine" to the database
 	cr.read_customer_cuisine(db);
+	*/
 
 	/*
 	// Call Matt's funciton here. Somehow.
