@@ -36,22 +36,9 @@ int main() {
 
 	rr.read_all(db);
 	
-	string x;
-	cin >> x;
+	cout << "\n";
 
-	/*
-	// Add table "Customers" to database
-	cr.read_customers(db);
-
-	// Add table "Customer Payments" to database
-	cr.read_customer_payments(db);
-
-	// Add table "Customer Cuisine" to the database
-	cr.read_customer_cuisine(db);
-	*/
-
-	/*
-	// Call Matt's funciton here. Somehow.
+	// Matt's function should be called at this point.
 	// Assume 3 tables are here in the database: customers, restaurants, ratings
 	
 	std::string input;
@@ -152,5 +139,4 @@ int main() {
 		}
 		cout << "Done.\n\n";
 	}
-	*/
 }
