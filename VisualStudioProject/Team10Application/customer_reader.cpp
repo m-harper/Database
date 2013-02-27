@@ -63,7 +63,7 @@ bool Customer_Reader::read_customers(Database& _db) {
 		cout << '\n';
 	}
 	// There should be EXACTLY 138 customers
-	assert(table.getSize() == 138);
+	assert(customers.getSize() == 138);
 	
 	// Add the table to the database
 	_db.addTable(customers, "Customers");
