@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <stdexcept>
 #include <fstream>
+#include "API.h"
+#include "Database.h"
 
 void printCustomerInfo(int userID);
 void printRestaurantInfo(std::string restaurantName);
