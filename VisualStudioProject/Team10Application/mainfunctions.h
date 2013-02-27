@@ -9,6 +9,6 @@
 #include <fstream>
 
 void printCustomerInfo(int userID);
-void printRestaurantInfo(string restaurantName);
+void printRestaurantInfo(std::string restaurantName);
 void printRatingsForCustomer(int userID);
-void printRatingsForRestaurant(string resturantName);
+void printRatingsForRestaurant(std::string resturantName);
