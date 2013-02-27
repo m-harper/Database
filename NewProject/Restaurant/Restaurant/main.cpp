@@ -12,7 +12,6 @@
 // chefmozaccepts: Contains placeID, and types of payments that resturant accepts.
 
 #include "mainfunctions.h"
-//#include "customer_reader.h"
 #include "restaurant_reader.h"
 #include "API.h"
 #include <string>
@@ -31,12 +30,48 @@ unsigned int commandIndex(std::string a) {
 
 int main() {
 	Database db;
-	//Customer_Reader cr;
 	Restaurant_Reader rr;
 
 	rr.read_all(db);
+	vector<string> table_names = db.listTables();
 	
-	cout << "\n";
+	cout << "Merging tables... ";
+	// Merge the user tables
+	Table user_table;
+	// Find the 3 user tables
+	for (string name : table_names) {
+		if (name.find("User") != name.npos) {
+			Table user = db.query(vector<string>(), name, "");
+			//cout << "Merging " << name << endl;
+			user_table = user_table.crossJoin(user_table, user);
+			db.removeTable(name);
+		}		
+	}
+	// User tables have been merged
+	// Add the new table into the database
+	db.addTable(user_table, "Users");
+
+	// Merge the chef tables
+	Table chef_table;
+	// Find the chef tables
+	for (string name : table_names) {
+		if (name.find("Chef") != name.npos) {
+			Table chef = db.query(vector<string>(), name, "");
+			//cout << "Merging " << name << endl;
+			chef_table = chef_table.crossJoin(chef_table, chef);
+			db.removeTable(name);
+		}		
+	}
+	// Add the chef table to the database
+	db.addTable(chef_table, "Chef");
+
+	cout << "Success!\nTables now in database: ";
+	table_names = db.listTables();
+	for (string name : table_names)
+		cout << name << " ";
+
+	
+	cout << "\n\n";
 
 	// Matt's function should be called at this point.
 	// Assume 3 tables are here in the database: customers, restaurants, ratings
