@@ -1,6 +1,12 @@
 #include "mainfunctions.h"
 
 void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Table custPayment) {
+	
+	cout << "\n          -- Customer Details for userID: " << userID << " --\n";
+	
+	bool custInfoPrinted = false;
+	int newLineTracker = 0;
+
 	// Get attribute list from the customers table
 	vector<AttributeList> attributeList1 = custProfile.getAttributes();
 	vector<AttributeList> attributeList2 = custCuisine.getAttributes();
@@ -15,7 +21,6 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 			++index;
 	}
 
-
 	// find matching userID from userID colunm.
 	int size = custProfile.getSize();
 	Table::TableIterator tableIterator = Table::TableIterator(0, &custProfile);
@@ -24,9 +29,16 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 		std::string value = record.getAt(index);
 
 		if(value == userID) {
-			for(int j = 0; j < record.size(); j++){
-				std::cout << record.getAt(j) << '\n';
+			for(int j = 1; j < record.size(); j++){
+				if (newLineTracker % 2 == 0) {
+					std::cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "   ";
+					newLineTracker++;
+				} else {
+					std::cout << left << setw(16)  << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+					newLineTracker++;
+				}
 			}
+			custInfoPrinted = true;
 			break;
 		}
 		if (i != custProfile.getSize() -1)
@@ -50,9 +62,16 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 		std::string value = record.getAt(index);
 
 		if(value == userID) {
-			for(int j = 0; j < record.size(); j++){
-				std::cout << record.getAt(j) << '\n';
+			for(int j = 1; j < record.size(); j++){
+				if (newLineTracker % 2 == 0) {
+					std::cout << left << setw(16)  << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "   ";
+					newLineTracker++;
+				} else {
+					std::cout << left << setw(16)  << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+					newLineTracker++;
+				}
 			}
+			custInfoPrinted = true;
 		}
 		if (i != custCuisine.getSize() -1)
 			record = tableIterator.next();
@@ -74,13 +93,25 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 		std::string value = record.getAt(index);
 
 		if(value == userID) {
-			for(int j = 0; j < record.size(); j++){
-				std::cout << record.getAt(j) << '\n';
+			for(int j = 1; j < record.size(); j++){
+				if (newLineTracker % 2 == 0) {
+					std::cout << left << setw(16)  << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "   ";
+					newLineTracker++;
+				} else {
+					std::cout  << left << setw(16)  << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+					newLineTracker++;
+				}
 			}
+			custInfoPrinted = true;
 		}
 		if (i != custPayment.getSize() -1)
 			record = tableIterator.next();
 	}
+
+	if (!custInfoPrinted)
+		cout << "No data found.\n\n";
+	else
+		cout << "\n";
 }
 void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restAccpets, Table restCuisine, Table restHours, Table restParking) {
 	// Get attribute list from the restaurant table
