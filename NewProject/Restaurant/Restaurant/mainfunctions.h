@@ -11,6 +11,6 @@
 #include "Database.h"
 
 void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Table custPayment);
-void printRestaurantInfo(std::string restaurantName);
+void printRestaurantInfo(string restName, Table restInfo, Table restAccpets, Table restCuisine, Table restHours, Table restParking);
 void printRatingsForCustomer(string userID);
 void printRatingsForRestaurant(std::string resturantName);

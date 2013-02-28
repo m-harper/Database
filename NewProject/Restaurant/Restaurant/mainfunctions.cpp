@@ -6,8 +6,7 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 	vector<AttributeList> attributeList2 = custCuisine.getAttributes();
 	vector<AttributeList> attributeList3 = custPayment.getAttributes();
 
-	// ?? do we assume userID is first attribute in table? or we do not know it?
-	// If we do not know where userID attribute is
+	// Find where userID attribute is
 	int index = 0;
 	while(index < attributeList1.size()) {
 		if(attributeList1[index].getName() == "userID")
@@ -16,7 +15,6 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 			++index;
 	}
 
-	cout << index;
 
 	// find matching userID from userID colunm.
 	int size = custProfile.getSize();
@@ -83,12 +81,33 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 		if (i != custPayment.getSize() -1)
 			record = tableIterator.next();
 	}
-
-	// Then print out a record
-
-
 }
-void printRestaurantInfo(std::string restaurantName, Table restaurants) {
+void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restAccpets, Table restCuisine, Table restHours, Table restParking) {
+	// Get attribute list from the restaurant table
+	vector<AttributeList> attributeList1 = restInfo.getAttributes();
+	vector<AttributeList> attributeList2 = restAccpets.getAttributes();
+	vector<AttributeList> attributeList3 = restCuisine.getAttributes();
+	vector<AttributeList> attributeList4 = restHours.getAttributes();
+	vector<AttributeList> attributeList5 = restParking.getAttributes();
+
+	// Find where restaurant name attribute is
+	int nameIndex = 0;
+	while(nameIndex < attributeList1.size()) {
+		if(attributeList1[nameIndex].getName() == "name")
+			break;
+		else
+			++nameIndex;
+	}
+
+	// Find where place ID attribute is
+	int placeIndex = 0;
+	while(placeIndex < attributeList1.size()) {
+		if(attributeList1[placeIndex].getName() == "placeID")
+			break;
+		else
+			++placeIndex;
+	}
+
 
 }
 

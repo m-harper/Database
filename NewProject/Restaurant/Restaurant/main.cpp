@@ -73,10 +73,18 @@ int main() {
 		case 1: // Displays info about resturant. Syntax :  R <Resurant Name>
 			try {
 
-				cout << "\ntest R\n";
+				//cout << "\ntest R\n";
 				// Use restaurant name and find matching placeID here.
 
-				//printRestaurantInfo(int placeID, Table restaurant);
+				input.erase(0,2);
+
+				Table restInfo = db.query(vector<string>(), "Restaurant Info", "");
+				Table restAccepts = db.query(vector<string>(), "Restaurant Accepts", "");
+				Table restCuisine = db.query(vector<string>(), "Restaurant Cuisine", "");
+				Table restHours = db.query(vector<string>(), "Restaurant Hours", "");
+				Table restParking = db.query(vector<string>(), "Restaurant Parking", "");
+
+				printRestaurantInfo(input, restInfo, restAccepts, restCuisine, restHours, restParking);
 
 			} catch (int e) {
 
