@@ -4,14 +4,16 @@
 bool Restaurant_Reader::read_all(Database& _db) {
 	vector<const char*> file_names;
 	vector<string> table_names;
+	file_names.push_back("data/geoplaces2.txt");
+	table_names.push_back("Restaurant Info");
 	file_names.push_back("data/chefmozaccepts.txt");
-	table_names.push_back("Chef Accepts");
+	table_names.push_back("Restaurant Accepts");
 	file_names.push_back("data/chefmozcuisine.txt");
-	table_names.push_back("Chef Cuisine");
+	table_names.push_back("Restaurant Cuisine");
 	file_names.push_back("data/chefmozhours4.txt");
-	table_names.push_back("Chef Hours");
+	table_names.push_back("Restaurant Hours");
 	file_names.push_back("data/chefmozparking.txt");
-	table_names.push_back("Chef Parking");
+	table_names.push_back("Restaurant Parking");
 	file_names.push_back("data/usercuisine.txt");
 	table_names.push_back("User Cuisine");
 	file_names.push_back("data/userpayment.txt");
@@ -20,6 +22,7 @@ bool Restaurant_Reader::read_all(Database& _db) {
 	table_names.push_back("User Profile");
 	file_names.push_back("data/rating_final.txt");
 	table_names.push_back("Ratings");
+	
 
 	for (int i = 0; i < file_names.size(); i++) {
 		if (! read_one(file_names[i], table_names[i], _db))
