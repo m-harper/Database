@@ -1,9 +1,9 @@
 #include "mainfunctions.h"
 
 void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Table custPayment) {
-	
+
 	cout << "\n          -- Customer Details for userID: " << userID << " --\n";
-	
+
 	bool custInfoPrinted = false;
 	int newLineTracker = 0;
 
@@ -123,12 +123,12 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 }
 
 void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restAccpets, Table restCuisine, Table restHours, Table restParking) {
-	
+
 	cout << "\n       -- Restaurant Details for restaurantName: " << restaurantName << " --\n";
-	
+
 	bool restInfoPrinted = false;
 	int newLineTracker = 0;
-	
+
 	// Get attribute list from the restaurant table
 	vector<AttributeList> attributeList1 = restInfo.getAttributes();
 	vector<AttributeList> attributeList2 = restAccpets.getAttributes();
@@ -158,7 +158,6 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 
 	// Search place ID for restaurantName
 	string placeID;
-	int size = restInfo.getSize();
 	Table::TableIterator tableIterator = Table::TableIterator(0, &restInfo);
 	Record record = tableIterator.get();
 	for(int i = 0; i < restInfo.getSize(); i++){
@@ -184,6 +183,11 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 			record = tableIterator.next();
 	}
 
+	if(!restInfoPrinted)
+		throw 401;
+	else
+		cout << '\n';
+
 	// -------------------------------------------------------------------------------------------
 	// restAccepts
 
@@ -196,7 +200,6 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 			++placeIndex;
 	}
 
-	size = restAccpets.getSize();
 	tableIterator = Table::TableIterator(0, &restAccpets);
 	record = tableIterator.get();
 
@@ -231,7 +234,6 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 			++placeIndex;
 	}
 
-	size = restCuisine.getSize();
 	tableIterator = Table::TableIterator(0, &restCuisine);
 	record = tableIterator.get();
 
@@ -267,7 +269,6 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 			++placeIndex;
 	}
 
-	size = restHours.getSize();
 	tableIterator = Table::TableIterator(0, &restHours);
 	record = tableIterator.get();
 
@@ -303,7 +304,6 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 			++placeIndex;
 	}
 
-	size = restParking.getSize();
 	tableIterator = Table::TableIterator(0, &restParking);
 	record = tableIterator.get();
 
@@ -325,16 +325,119 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 		if(i != (restParking.getSize() - 1))
 			record = tableIterator.next();
 	}
-
-
-	if(!restInfoPrinted)
-		cout << "No data found.\n\n";
-	else
-		cout << '\n';
 }
 
-void printRatingsForCustomer(string userID, Table ratings) {
+void printRatingsForCustomer(string userID, Table ratings, Table restInfo) {
+	cout << "\n       -- Rating for userID: " << userID << " --\n";
 
+	bool restInfoPrinted = false;
+	int newLineTracker = 0;
+
+	// Get attribute list from the restaurant table
+	vector<AttributeList> attributeList1 = ratings.getAttributes();
+	vector<AttributeList> attributeList2 = restInfo.getAttributes();
+
+	// ------------------------------------------------------------------------
+	// ratings
+	// Search where userID attribute is in Table ratings
+	int userIdIndex = 0;
+	while(userIdIndex < attributeList1.size()) {
+		if(attributeList1[userIdIndex].getName() == "userID")
+			break;
+		else
+			++userIdIndex;
+	}
+
+	// Search where place ID attribute is in Table ratings
+	int ratingPlaceIndex = 0;
+	while(ratingPlaceIndex < attributeList1.size()) {
+		if(attributeList1[ratingPlaceIndex].getName() == "placeID")
+			break;
+		else
+			++ratingPlaceIndex;
+	}
+
+
+	// restInfo
+	// Search where restaurant name attribute is in Table restInfo
+	int nameIndex = 0;
+	while(nameIndex < attributeList2.size()) {
+		if(attributeList2[nameIndex].getName() == "name")
+			break;
+		else
+			++nameIndex;
+	}
+
+	// Search where place ID attribute is in Table restInfo
+	int restPlaceIndex = 0;
+	while(restPlaceIndex < attributeList2.size()) {
+		if(attributeList2[restPlaceIndex].getName() == "placeID")
+			break;
+		else
+			++restPlaceIndex;
+	}
+
+	// Search place ID for restaurantName
+	string placeID;
+	Table::TableIterator tableIterator1 = Table::TableIterator(0, &ratings);
+	Table::TableIterator tableIterator2 = Table::TableIterator(0, &restInfo);
+	Record record1 = tableIterator1.get();
+	Record record2 = tableIterator2.get();
+	int theNumber = 1;
+
+	for(int i = 0; i < ratings.getSize(); i++){
+		string value = record1.getAt(userIdIndex);
+
+		if(value == userID) {
+			cout << "\n *******" << theNumber << "*******\n";
+			placeID = record1.getAt(ratingPlaceIndex);
+
+			for(int k = 0; k < restInfo.getSize(); k++){
+				
+				string restaurantName = record2.getAt(nameIndex);
+				
+				cout << "Restaurant Name is: " << restaurantName << endl;
+
+			}
+
+			for(int j = 1; j < record1.size(); j++){
+				if(newLineTracker % 2 == 0) {
+					cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record1.getAt(j) << "    ";
+					newLineTracker++;
+				} else {
+					cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record1.getAt(j) << "\n";
+					newLineTracker++;
+				}
+			}
+
+			restInfoPrinted = true;
+			++theNumber;
+		}
+		if (i != (ratings.getSize() - 1))
+			record1 = tableIterator1.next();
+	}
+
+	// ------------------------------------------------------------------------------
+	/*
+	tableIterator = Table::TableIterator(0, &restInfo);
+	record = tableIterator.get();
+
+	for(int i = 0; i < restInfo.getSize(); i++) {
+	string value = record.getAt(restPlaceIndex);
+
+	if(value == placeID){
+	string restaurantName = record.getAt(nameIndex);
+	cout << "\n Restaurant Name is: " << restaurantName << endl;
+	restInfoPrinted = true;
+	}
+	if(i != (restInfo.getSize() - 1))
+	record = tableIterator.next();
+	}
+	*/
+	if(!restInfoPrinted)
+		throw 401;
+	else
+		cout << '\n';
 }
 
 void printRatingsForRestaurant(std::string resturantName, Table ratings) {

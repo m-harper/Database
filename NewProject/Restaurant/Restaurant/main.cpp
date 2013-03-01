@@ -92,19 +92,24 @@ int main() {
 				switch (e) {
 
 				case 401:
+					cout << "No data.\n";
+					break;
 					// This is a case of catching an specific error.
 					// Throw 401 anywhere in the try clause and it'll catch here.
 					// Use cout to display the error message.
 					// Make more cases for different errors.
-					break;
 				}
 			}
 			break;
 		case 2: // Displays rating info for a customer, Stntax: A <Customer ID> 
 			try {
 
-				cout << "\ntest A\n";
-				//printRatingsForCustomer(int userID, Table ratings);
+				input.erase(0,2);
+
+				Table ratings = db.query(vector<string>(), "Ratings", "");
+				Table restInfo = db.query(vector<string>(), "Restaurant Info", "");
+
+				printRatingsForCustomer(input, ratings, restInfo);
 
 			} catch (int e) {
 
