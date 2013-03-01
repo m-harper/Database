@@ -2,9 +2,14 @@
 
 void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Table custPayment) {
 
-	cout << "\n          -- Customer Details for userID: " << userID << " --\n";
+	cout << "\r";
+	cout << "       -- Customer Details for userID: " << userID << " --\nPlease wait...";
+	cout << "\r";
 
 	bool custInfoPrinted = false;
+	bool custItemFound = false;
+	bool custItemFinish = false;
+
 	int newLineTracker = 0;
 
 	// Get attribute list from the customers table
@@ -29,15 +34,15 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 	Record record = tableIterator.get();
 	for(int i = 0; i < custProfile.getSize(); i++) {
 		std::string value = record.getAt(index);
-
 		if(value == userID) {
-			for(int j = 0; j < record.size(); j++){
+			for(int j = 0; j < record.size(); j++) {
 				if(attributeList1[j].getName() != "userID"){
+					string tempString = attributeList1[j].getName() + ": " + record.getAt(j);
 					if (newLineTracker % 2 == 0) {
-						std::cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "   ";
+						cout << left << setw(28) << tempString << "   ";
 						newLineTracker++;
 					} else {
-						std::cout << left << setw(16)  << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						cout << left << setw(28) << tempString << "\n";
 						newLineTracker++;
 					}
 				}
@@ -45,9 +50,19 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 			custInfoPrinted = true;
 			break;
 		}
+
 		if (i != (custProfile.getSize() -1))
 			record = tableIterator.next();
 	}
+
+	// If customer not found, then throw error message.
+	if (!custInfoPrinted)
+		throw 402;
+	if (newLineTracker % 2 == 0)
+		cout << "\n";
+	else
+		cout << "\n\n";
+	newLineTracker = 0;
 
 	// -------------------------------------------------------------------------------------------
 	// custCuisine
@@ -71,20 +86,63 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 		if(value == userID) {
 			for(int j = 0; j < record.size(); j++){
 				if(attributeList2[j].getName() != "userID"){
+					string tempString = attributeList2[j].getName() + ": " + record.getAt(j);
 					if (newLineTracker % 2 == 0) {
-						std::cout << left << setw(16)  << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "   ";
+						cout << left << setw(28) << tempString << "   ";
 						newLineTracker++;
 					} else {
-						std::cout << left << setw(16)  << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						cout << left << setw(28) << tempString << "\n";
 						newLineTracker++;
 					}
 				}
 			}
-			custInfoPrinted = true;
+			custItemFound = true;
 		}
-		if (i != (custCuisine.getSize() -1))
+
+		while (custItemFound == true) {
+			if (i != (custCuisine.getSize() - 1) ) {
+				record = tableIterator.next();
+				value = record.getAt(index);
+				if(value == userID) {
+					for(int j = 0; j < record.size(); j++) {
+						if(attributeList2[j].getName() != "userID"){
+							string tempString = attributeList2[j].getName() + ": " + record.getAt(j);
+							if (newLineTracker % 2 == 0) {
+								cout << left << setw(28) << tempString << "   ";
+								newLineTracker++;
+							} else {
+								cout << left << setw(28) << tempString << "\n";
+								newLineTracker++;
+							}
+						}
+					}
+				} else {
+					custItemFound = false;
+					custItemFinish = true;
+				}
+			} else custItemFound = false;
+		}
+
+		if (custItemFinish)
+			break;
+
+		if(i != (custCuisine.getSize() - 1)) {
 			record = tableIterator.next();
+			cout << "Searching: Cuisine (" << i << "/331)";
+			cout << "\r";
+		} else {
+			// Clear the line.
+			cout << "                                                  ";
+		}
 	}
+
+	custItemFound = false;
+	custItemFinish = false;
+	if (newLineTracker % 2 == 0)
+		cout << "\n";
+	else
+		cout << "\n\n";
+	newLineTracker = 0;
 
 	// ---------------------------------------------------------------------------------------
 	// custPayment
@@ -107,32 +165,69 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 		if(value == userID) {
 			for(int j = 0; j < record.size(); j++){
 				if(attributeList3[j].getName() != "userID"){
+					string tempString = attributeList3[j].getName() + ": " + record.getAt(j);
 					if (newLineTracker % 2 == 0) {
-						std::cout << left << setw(16)  << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "   ";
+						cout << left << setw(28) << tempString << "   ";
 						newLineTracker++;
 					} else {
-						std::cout  << left << setw(16)  << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						cout << left << setw(28) << tempString << "\n";
 						newLineTracker++;
 					}
 				}
 			}
-			custInfoPrinted = true;
+			custItemFound = true;
 		}
-		if (i != (custPayment.getSize() -1))
+
+		while (custItemFound == true) {
+			if (i != (custPayment.getSize() - 1) ) {
+				record = tableIterator.next();
+				value = record.getAt(index);
+				if(value == userID) {
+					for(int j = 0; j < record.size(); j++) {
+						if(attributeList3[j].getName() != "userID"){
+							string tempString = attributeList3[j].getName() + ": " + record.getAt(j);
+							if (newLineTracker % 2 == 0) {
+								cout << left << setw(28) << tempString << "   ";
+								newLineTracker++;
+							} else {
+								cout << left << setw(28) << tempString << "\n";
+								newLineTracker++;
+							}
+						}
+					}
+				} else {
+					custItemFound = false;
+					custItemFinish = true;
+				}
+			} else custItemFound = false;
+		}
+
+		if (custItemFinish)
+			break;
+
+		if(i != (custPayment.getSize() - 1)) {
 			record = tableIterator.next();
+			cout << "Searching: Payment (" << i << "/178)";
+			cout << "\r";
+		} else {
+			// Clear the line.
+			cout << "                                                  ";
+		}
 	}
 
-	if (!custInfoPrinted)
-		cout << "No data found.\n\n";
-	else
-		cout << "\n";
+	cout << "\n\n";
 }
 
-void printRestaurantInfo(std::string restName, Table restInfo, Table restAccpets, Table restCuisine, Table restHours, Table restParking) {
+void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restAccpets, Table restCuisine, Table restHours, Table restParking) {
 
-	cout << "\n       -- Restaurant Details for restaurantName: " << restName << " --\n";
+	cout << "\r";
+	cout << "       -- Restaurant Details for restaurantName: " << restaurantName << " --\nPlease wait...";
+	cout << "\r";
 
 	bool restInfoPrinted = false;
+	bool restItemFound = false;
+	bool restItemFinish = false;
+
 	int newLineTracker = 0;
 
 	// Get attribute list from the restaurant table
@@ -169,15 +264,24 @@ void printRestaurantInfo(std::string restName, Table restInfo, Table restAccpets
 	for(int i = 0; i < restInfo.getSize(); i++){
 		string value = record.getAt(nameIndex);
 
-		if(value == restName) {
+		if(value == restaurantName) {
 			for(int j = 0; j < record.size(); j++){
 				if(attributeList1[j].getName() != "name"){
-					if(newLineTracker % 2 == 0) {
-						cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
+					string tempString = attributeList1[j].getName() + ": " + record.getAt(j);
+					if (newLineTracker % 2 == 0) {
+						cout << left << setw(28) << tempString << "   ";
+						if (j == 3)
+							cout << "\n";
+						else;
 						newLineTracker++;
 					} else {
-						cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
-						newLineTracker++;
+						if (j == 3) {
+							cout << "\n" << left << setw(28) << tempString << "\n";
+							newLineTracker++;
+						} else {
+							cout << left << setw(28) << tempString << "\n";
+							newLineTracker++;
+						}
 					}
 				}
 			}
@@ -193,8 +297,11 @@ void printRestaurantInfo(std::string restName, Table restInfo, Table restAccpets
 
 	if(!restInfoPrinted)
 		throw 401;
+	if (newLineTracker % 2 == 0)
+		cout << "\n";
 	else
-		cout << '\n';
+		cout << "\n\n";
+	newLineTracker = 0;
 
 	// -------------------------------------------------------------------------------------------
 	// restAccepts
@@ -215,22 +322,66 @@ void printRestaurantInfo(std::string restName, Table restInfo, Table restAccpets
 		string value = record.getAt(placeIndex);
 
 		if(value == placeID){
-			for(int j = 0; j < record.size(); j++){
+			for(int j = 0; j < record.size(); j++) {
 				if(attributeList2[j].getName() != "placeID"){
-					if(newLineTracker % 2 == 0) {
-						cout << left << setw(16) << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
+					string tempString = attributeList2[j].getName() + ": " + record.getAt(j);
+					if (newLineTracker % 2 == 0) {
+						cout << left << setw(28) << tempString << "   ";
 						newLineTracker++;
 					} else {
-						cout << left << setw(16) << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						cout << left << setw(28) << tempString << "\n";
 						newLineTracker++;
 					}
 				}
 			}
-			restInfoPrinted = true;
+			restItemFound = true;
 		}
-		if(i != (restAccpets.getSize() - 1))
+
+
+		while (restItemFound == true) {
+			if (i != (restAccpets.getSize() - 1) ) {
+				record = tableIterator.next();
+				value = record.getAt(placeIndex);
+				if(value == placeID) {
+					for(int j = 0; j < record.size(); j++) {
+						if(attributeList2[j].getName() != "placeID"){
+							string tempString = attributeList2[j].getName() + ": " + record.getAt(j);
+							if (newLineTracker % 2 == 0) {
+								cout << left << setw(28) << tempString << "   ";
+								newLineTracker++;
+							} else {
+								cout << left << setw(28) << tempString << "\n";
+								newLineTracker++;
+							}
+						}
+					}
+				} else {
+					restItemFound = false;
+					restItemFinish = true;
+				}
+			} else restItemFound = false;
+		}
+
+		if (restItemFinish)
+			break;
+
+		if(i != (restAccpets.getSize() - 1)) {
 			record = tableIterator.next();
+			cout << "Searching: Payment (" << i << "/1315)";
+			cout << "\r";
+		} else {
+			// Clear the line.
+			cout << "                                                  ";
+		}
 	}
+
+	restItemFound = false;
+	restItemFinish = false;
+	if (newLineTracker % 2 == 0)
+		cout << "\n";
+	else
+		cout << "\n\n";
+	newLineTracker = 0;
 
 	// ----------------------------------------------------------------------------------
 	// restCuisine
@@ -253,21 +404,64 @@ void printRestaurantInfo(std::string restName, Table restInfo, Table restAccpets
 		if(value == placeID){
 			for(int j = 0; j < record.size(); j++){
 				if(attributeList3[j].getName() != "placeID"){
-					if(newLineTracker % 2 == 0) {
-						cout << left << setw(16) << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
+					string tempString = attributeList3[j].getName() + ": " + record.getAt(j);
+					if (newLineTracker % 2 == 0) {
+						cout << left << setw(28) << tempString << "   ";
 						newLineTracker++;
 					} else {
-						cout << left << setw(16) << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						cout << left << setw(28) << tempString << "\n";
 						newLineTracker++;
 					}
 				}
 			}
-			restInfoPrinted = true;
+			restItemFound = true;
 		}
-		if(i != (restCuisine.getSize() - 1))
+
+		while (restItemFound == true) {
+			if (i != (restCuisine.getSize() - 1) ) {
+				record = tableIterator.next();
+				value = record.getAt(placeIndex);
+				if(value == placeID) {
+					for(int j = 0; j < record.size(); j++) {
+						if(attributeList3[j].getName() != "placeID"){
+							string tempString = attributeList3[j].getName() + ": " + record.getAt(j);
+							if (newLineTracker % 2 == 0) {
+								cout << left << setw(28) << tempString << "   ";
+								newLineTracker++;
+							} else {
+								cout << left << setw(28) << tempString << "\n";
+								newLineTracker++;
+							}
+						}
+					}
+				} else {
+					restItemFound = false;
+					restItemFinish = true;
+				}
+			} else restItemFound = false;
+		}
+
+		if (restItemFinish)
+			break;
+
+
+		if(i != (restCuisine.getSize() - 1)) {
 			record = tableIterator.next();
+			cout << "Searching: Cuisine (" << i << "/917)";
+			cout << "\r";
+		} else {
+			// Clear the line.
+			cout << "                                                  ";
+		}
 	}
 
+	restItemFound = false;
+	restItemFinish = false;
+	if (newLineTracker % 2 == 0)
+		cout << "\n";
+	else
+		cout << "\n\n";
+	newLineTracker = 0;
 
 	// -----------------------------------------------------------------------------------
 	// restHours
@@ -290,21 +484,63 @@ void printRestaurantInfo(std::string restName, Table restInfo, Table restAccpets
 		if(value == placeID){
 			for(int j = 0; j < record.size(); j++){
 				if(attributeList4[j].getName() != "placeID"){
-					if(newLineTracker % 2 == 0) {
-						cout << '\n' <<left << setw(16) << attributeList4[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+					string tempString = attributeList4[j].getName() + ": " + record.getAt(j);
+					if (newLineTracker % 2 == 0) {
+						cout << left << setw(28) << tempString << "   ";
 						newLineTracker++;
 					} else {
-						cout << left << setw(16) << attributeList4[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						cout << left << setw(28) << tempString << "\n";
 						newLineTracker++;
 					}
 				}
 			}
-			restInfoPrinted = true;
+			restItemFound = true;
 		}
-		if(i != (restHours.getSize() - 1))
+
+		while (restItemFound == true) {
+			if (i != (restHours.getSize() - 1) ) {
+				record = tableIterator.next();
+				value = record.getAt(placeIndex);
+				if(value == placeID) {
+					for(int j = 0; j < record.size(); j++) {
+						if(attributeList4[j].getName() != "placeID"){
+							string tempString = attributeList4[j].getName() + ": " + record.getAt(j);
+							if (newLineTracker % 2 == 0) {
+								cout << left << setw(28) << tempString << "   ";
+								newLineTracker++;
+							} else {
+								cout << left << setw(28) << tempString << "\n";
+								newLineTracker++;
+							}
+						}
+					}
+				} else {
+					restItemFound = false;
+					restItemFinish = true;
+				}
+			} else restItemFound = false;
+		}
+
+		if (restItemFinish)
+			break;
+
+		if(i != (restHours.getSize() - 1)) {
 			record = tableIterator.next();
+			cout << "Searching: Hours (" << i << "/2340)";
+			cout << "\r";
+		} else {
+			// Clear the line.
+			cout << "                                                  ";
+		}
 	}
 
+	restItemFound = false;
+	restItemFinish = false;
+	if (newLineTracker % 2 == 0)
+		cout << "\n";
+	else
+		cout << "\n\n";
+	newLineTracker = 0;
 
 	// -----------------------------------------------------------------------------------
 	// restParking
@@ -327,20 +563,57 @@ void printRestaurantInfo(std::string restName, Table restInfo, Table restAccpets
 		if(value == placeID){
 			for(int j = 0; j < record.size(); j++){
 				if(attributeList5[j].getName() != "placeID"){
-					if(newLineTracker % 2 == 0) {
-						cout << left << setw(16) << attributeList5[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
+					string tempString = attributeList5[j].getName() + ": " + record.getAt(j);
+					if (newLineTracker % 2 == 0) {
+						cout << left << setw(28) << tempString << "   ";
 						newLineTracker++;
 					} else {
-						cout << left << setw(16) << attributeList5[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						cout << left << setw(28) << tempString << "\n";
 						newLineTracker++;
 					}
 				}
 			}
-			restInfoPrinted = true;
+			restItemFound = true;
 		}
-		if(i != (restParking.getSize() - 1))
+
+		while (restItemFound == true) {
+			if (i != (restParking.getSize() - 1) ) {
+				record = tableIterator.next();
+				value = record.getAt(placeIndex);
+				if(value == placeID) {
+					for(int j = 0; j < record.size(); j++) {
+						if(attributeList2[j].getName() != "placeID"){
+							string tempString = attributeList5[j].getName() + ": " + record.getAt(j);
+							if (newLineTracker % 2 == 0) {
+								cout << left << setw(28) << tempString << "   ";
+								newLineTracker++;
+							} else {
+								cout << left << setw(28) << tempString << "\n";
+								newLineTracker++;
+							}
+						}
+					}
+				} else {
+					restItemFound = false;
+					restItemFinish = true;
+				}
+			} else restItemFound = false;
+		}
+
+		if (restItemFinish)
+			break;
+
+		if(i != (restParking.getSize() - 1)) {
 			record = tableIterator.next();
+			cout << "Searching: Parking (" << i << "/703)";
+			cout << "\r";
+		} else {
+			// Clear the line.
+			cout << "                                                  ";
+		}
 	}
+
+	cout << "\n\n";
 }
 
 void printRatingsForCustomer(string userID, Table ratings, Table restInfo) {
@@ -440,7 +713,7 @@ void printRatingsForCustomer(string userID, Table ratings, Table restInfo) {
 	}
 
 	if(!restInfoPrinted)
-		throw 401;
+		throw 402;
 	else
 		cout << '\n';
 }

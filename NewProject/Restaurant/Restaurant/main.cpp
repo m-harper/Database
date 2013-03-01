@@ -35,6 +35,11 @@ int main() {
 	rr.read_all(db);
 
 	cout << "\n\n";
+	cout << "Syntax:\n";
+	cout << "C <userID>            : Prints info about customer.\n";
+	cout << "R <Restaurant Name>   : Prints info about restaurant.\n";
+	cout << "A <userID>            : Prints info about customer's ratings.\n";
+	cout << "B <Restaurant Name>   : Prints info about restaurant's ratings.\n\n";
 
 	// Matt's function should be called at this point.
 	// Assume 3 tables are here in the database: customers, restaurants, ratings
@@ -50,7 +55,12 @@ int main() {
 		case 0: // Displays info about a customer. Syntax: C <Customer ID>
 			try {
 
+				cout << "\nPlease wait...";
+
 				input.erase(0,2);
+
+				if (input.length() != 5)
+					throw 401;
 
 				Table custProfile = db.query(vector<string>(), "User Profile", "");
 				Table custCuisine = db.query(vector<string>(), "User Cuisine", "");
@@ -62,11 +72,10 @@ int main() {
 				cout << "\nError: ";
 				switch (e) {
 				case 401:
-					cout << "No data.\n";
-					// This is a case of catching an specific error.
-					// Throw 401 anywhere in the try clause and it'll catch here.
-					// Use cout to display the error message.
-					// Make more cases for different errors.
+					cout << "Invalid ID length.\n\n";
+					break;
+				case 402:
+					cout << "Customer profile not found.\n\n";
 					break;
 				}
 			}
@@ -74,8 +83,7 @@ int main() {
 		case 1: // Displays info about resturant. Syntax :  R <Resurant Name>
 			try {
 
-				//cout << "\ntest R\n";
-				// Use restaurant name and find matching placeID here.
+				cout << "\nPlease wait...";
 
 				input.erase(0,2);
 
@@ -93,11 +101,7 @@ int main() {
 				switch (e) {
 
 				case 401:
-					cout << "No data.\n";
-					// This is a case of catching an specific error.
-					// Throw 401 anywhere in the try clause and it'll catch here.
-					// Use cout to display the error message.
-					// Make more cases for different errors.
+					cout << "Restaurant main profile not found.\n\n";
 					break;
 				}
 			}
@@ -106,6 +110,9 @@ int main() {
 			try {
 
 				input.erase(0,2);
+
+				if (input.length() != 5)
+					throw 401;
 
 				Table ratings = db.query(vector<string>(), "Ratings", "");
 				Table restInfo = db.query(vector<string>(), "Restaurant Info", "");
@@ -116,13 +123,11 @@ int main() {
 
 				cout << "\nError: ";
 				switch (e) {
-
 				case 401:
-					cout << "No data'\n";
-					// This is a case of catching an specific error.
-					// Throw 401 anywhere in the try clause and it'll catch here.
-					// Use cout to display the error message.
-					// Make more cases for different errors.
+					cout << "Invalid ID length.\n\n";
+					break;
+				case 402:
+					cout << "Customer profile not found.\n\n";
 					break;
 				}
 			}
@@ -145,11 +150,7 @@ int main() {
 				switch (e) {
 
 				case 401:
-					cout << "No data.\n";
-					// This is a case of catching an specific error.
-					// Throw 401 anywhere in the try clause and it'll catch here.
-					// Use cout to display the error message.
-					// Make more cases for different errors.
+					cout << "Restaurant main profile not found.\n\n";
 					break;
 				}
 			}
