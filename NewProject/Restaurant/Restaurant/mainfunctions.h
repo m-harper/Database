@@ -13,4 +13,4 @@
 void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Table custPayment);
 void printRestaurantInfo(string restName, Table restInfo, Table restAccpets, Table restCuisine, Table restHours, Table restParking);
 void printRatingsForCustomer(string userID, Table ratings, Table restInfo);
-void printRatingsForRestaurant(std::string resturantName);
+void printRatingsForRestaurant(std::string restName, Table restInfo, Table ratings);

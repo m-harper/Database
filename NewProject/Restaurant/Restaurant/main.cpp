@@ -33,12 +33,12 @@ int main() {
 	Restaurant_Reader rr;
 
 	rr.read_all(db);
-	
+
 	cout << "\n\n";
 
 	// Matt's function should be called at this point.
 	// Assume 3 tables are here in the database: customers, restaurants, ratings
-	
+
 	std::string input;
 
 	while (true) {
@@ -62,6 +62,7 @@ int main() {
 				cout << "\nError: ";
 				switch (e) {
 				case 401:
+					cout << "No data.\n";
 					// This is a case of catching an specific error.
 					// Throw 401 anywhere in the try clause and it'll catch here.
 					// Use cout to display the error message.
@@ -93,11 +94,11 @@ int main() {
 
 				case 401:
 					cout << "No data.\n";
-					break;
 					// This is a case of catching an specific error.
 					// Throw 401 anywhere in the try clause and it'll catch here.
 					// Use cout to display the error message.
 					// Make more cases for different errors.
+					break;
 				}
 			}
 			break;
@@ -117,6 +118,7 @@ int main() {
 				switch (e) {
 
 				case 401:
+					cout << "No data'\n";
 					// This is a case of catching an specific error.
 					// Throw 401 anywhere in the try clause and it'll catch here.
 					// Use cout to display the error message.
@@ -128,10 +130,14 @@ int main() {
 		case 3: // Displays rating infor for a restaurant, Syntax: B <Restaurant Name>
 			try {
 
-				cout << "\ntest B\n";
+				input.erase(0,2);
+
+				Table restInfo = db.query(vector<string>(), "Restaurant Info", "");
+				Table ratings = db.query(vector<string>(), "Ratings", "");
+
 				// Use restaurant name and find matching placeID here.
 
-				//printRatingsForRestaurant(int placeID, Table ratings);
+				printRatingsForRestaurant(input, restInfo, ratings);
 				// - Iterate through ratings and pull out all the ratings that match placeID.
 			} catch (int e) {
 
@@ -139,6 +145,7 @@ int main() {
 				switch (e) {
 
 				case 401:
+					cout << "No data.\n";
 					// This is a case of catching an specific error.
 					// Throw 401 anywhere in the try clause and it'll catch here.
 					// Use cout to display the error message.

@@ -31,13 +31,15 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 		std::string value = record.getAt(index);
 
 		if(value == userID) {
-			for(int j = 1; j < record.size(); j++){
-				if (newLineTracker % 2 == 0) {
-					std::cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "   ";
-					newLineTracker++;
-				} else {
-					std::cout << left << setw(16)  << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
-					newLineTracker++;
+			for(int j = 0; j < record.size(); j++){
+				if(attributeList1[j].getName() != "userID"){
+					if (newLineTracker % 2 == 0) {
+						std::cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "   ";
+						newLineTracker++;
+					} else {
+						std::cout << left << setw(16)  << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						newLineTracker++;
+					}
 				}
 			}
 			custInfoPrinted = true;
@@ -67,13 +69,15 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 		std::string value = record.getAt(index);
 
 		if(value == userID) {
-			for(int j = 1; j < record.size(); j++){
-				if (newLineTracker % 2 == 0) {
-					std::cout << left << setw(16)  << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "   ";
-					newLineTracker++;
-				} else {
-					std::cout << left << setw(16)  << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
-					newLineTracker++;
+			for(int j = 0; j < record.size(); j++){
+				if(attributeList2[j].getName() != "userID"){
+					if (newLineTracker % 2 == 0) {
+						std::cout << left << setw(16)  << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "   ";
+						newLineTracker++;
+					} else {
+						std::cout << left << setw(16)  << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						newLineTracker++;
+					}
 				}
 			}
 			custInfoPrinted = true;
@@ -101,13 +105,15 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 		std::string value = record.getAt(index);
 
 		if(value == userID) {
-			for(int j = 1; j < record.size(); j++){
-				if (newLineTracker % 2 == 0) {
-					std::cout << left << setw(16)  << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "   ";
-					newLineTracker++;
-				} else {
-					std::cout  << left << setw(16)  << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
-					newLineTracker++;
+			for(int j = 0; j < record.size(); j++){
+				if(attributeList3[j].getName() != "userID"){
+					if (newLineTracker % 2 == 0) {
+						std::cout << left << setw(16)  << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "   ";
+						newLineTracker++;
+					} else {
+						std::cout  << left << setw(16)  << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						newLineTracker++;
+					}
 				}
 			}
 			custInfoPrinted = true;
@@ -122,9 +128,9 @@ void printCustomerInfo(string userID, Table custProfile, Table custCuisine, Tabl
 		cout << "\n";
 }
 
-void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restAccpets, Table restCuisine, Table restHours, Table restParking) {
+void printRestaurantInfo(std::string restName, Table restInfo, Table restAccpets, Table restCuisine, Table restHours, Table restParking) {
 
-	cout << "\n       -- Restaurant Details for restaurantName: " << restaurantName << " --\n";
+	cout << "\n       -- Restaurant Details for restaurantName: " << restName << " --\n";
 
 	bool restInfoPrinted = false;
 	int newLineTracker = 0;
@@ -163,14 +169,16 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 	for(int i = 0; i < restInfo.getSize(); i++){
 		string value = record.getAt(nameIndex);
 
-		if(value == restaurantName) {
-			for(int j = 1; j < record.size(); j++){
-				if(newLineTracker % 2 == 0) {
-					cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
-					newLineTracker++;
-				} else {
-					cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
-					newLineTracker++;
+		if(value == restName) {
+			for(int j = 0; j < record.size(); j++){
+				if(attributeList1[j].getName() != "name"){
+					if(newLineTracker % 2 == 0) {
+						cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
+						newLineTracker++;
+					} else {
+						cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						newLineTracker++;
+					}
 				}
 			}
 
@@ -207,13 +215,15 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 		string value = record.getAt(placeIndex);
 
 		if(value == placeID){
-			for(int j = 1; j < record.size(); j++){
-				if(newLineTracker % 2 == 0) {
-					cout << left << setw(16) << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
-					newLineTracker++;
-				} else {
-					cout << left << setw(16) << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
-					newLineTracker++;
+			for(int j = 0; j < record.size(); j++){
+				if(attributeList2[j].getName() != "placeID"){
+					if(newLineTracker % 2 == 0) {
+						cout << left << setw(16) << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
+						newLineTracker++;
+					} else {
+						cout << left << setw(16) << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						newLineTracker++;
+					}
 				}
 			}
 			restInfoPrinted = true;
@@ -241,13 +251,15 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 		string value = record.getAt(placeIndex);
 
 		if(value == placeID){
-			for(int j = 1; j < record.size(); j++){
-				if(newLineTracker % 2 == 0) {
-					cout << left << setw(16) << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
-					newLineTracker++;
-				} else {
-					cout << left << setw(16) << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
-					newLineTracker++;
+			for(int j = 0; j < record.size(); j++){
+				if(attributeList3[j].getName() != "placeID"){
+					if(newLineTracker % 2 == 0) {
+						cout << left << setw(16) << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
+						newLineTracker++;
+					} else {
+						cout << left << setw(16) << attributeList3[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						newLineTracker++;
+					}
 				}
 			}
 			restInfoPrinted = true;
@@ -276,13 +288,15 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 		string value = record.getAt(placeIndex);
 
 		if(value == placeID){
-			for(int j = 1; j < record.size(); j++){
-				if(newLineTracker % 2 == 0) {
-					cout << '\n' <<left << setw(16) << attributeList4[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
-					newLineTracker++;
-				} else {
-					cout << left << setw(16) << attributeList4[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
-					newLineTracker++;
+			for(int j = 0; j < record.size(); j++){
+				if(attributeList4[j].getName() != "placeID"){
+					if(newLineTracker % 2 == 0) {
+						cout << '\n' <<left << setw(16) << attributeList4[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						newLineTracker++;
+					} else {
+						cout << left << setw(16) << attributeList4[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						newLineTracker++;
+					}
 				}
 			}
 			restInfoPrinted = true;
@@ -311,13 +325,15 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 		string value = record.getAt(placeIndex);
 
 		if(value == placeID){
-			for(int j = 1; j < record.size(); j++){
-				if(newLineTracker % 2 == 0) {
-					cout << left << setw(16) << attributeList5[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
-					newLineTracker++;
-				} else {
-					cout << left << setw(16) << attributeList5[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
-					newLineTracker++;
+			for(int j = 0; j < record.size(); j++){
+				if(attributeList5[j].getName() != "placeID"){
+					if(newLineTracker % 2 == 0) {
+						cout << left << setw(16) << attributeList5[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
+						newLineTracker++;
+					} else {
+						cout << left << setw(16) << attributeList5[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						newLineTracker++;
+					}
 				}
 			}
 			restInfoPrinted = true;
@@ -378,11 +394,9 @@ void printRatingsForCustomer(string userID, Table ratings, Table restInfo) {
 	}
 
 	// Search place ID for restaurantName
-	string placeID;
+	string placeID, id, restaurantName;
 	Table::TableIterator tableIterator1 = Table::TableIterator(0, &ratings);
-	Table::TableIterator tableIterator2 = Table::TableIterator(0, &restInfo);
 	Record record1 = tableIterator1.get();
-	Record record2 = tableIterator2.get();
 	int theNumber = 1;
 
 	for(int i = 0; i < ratings.getSize(); i++){
@@ -391,22 +405,30 @@ void printRatingsForCustomer(string userID, Table ratings, Table restInfo) {
 		if(value == userID) {
 			cout << "\n *******" << theNumber << "*******\n";
 			placeID = record1.getAt(ratingPlaceIndex);
+			Table::TableIterator tableIterator2 = Table::TableIterator(0, &restInfo);
+			Record record2 = tableIterator2.get();
 
 			for(int k = 0; k < restInfo.getSize(); k++){
-				
-				string restaurantName = record2.getAt(nameIndex);
-				
-				cout << "Restaurant Name is: " << restaurantName << endl;
+				id = record2.getAt(restPlaceIndex);
+				if(id == placeID){
+					restaurantName = record2.getAt(nameIndex);
 
+					cout << "Restaurant Name is: " << restaurantName << endl;
+					break;
+				}
+				if(k != (restInfo.getSize() - 1))
+					record2 = tableIterator2.next();
 			}
 
-			for(int j = 1; j < record1.size(); j++){
-				if(newLineTracker % 2 == 0) {
-					cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record1.getAt(j) << "    ";
-					newLineTracker++;
-				} else {
-					cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record1.getAt(j) << "\n";
-					newLineTracker++;
+			for(int j = 0; j < record1.size(); j++){
+				if(attributeList1[j].getName() != "userID"){
+					if(newLineTracker % 2 == 0) {
+						cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record1.getAt(j) << "    ";
+						newLineTracker++;
+					} else {
+						cout << left << setw(16) << attributeList1[j].getName() << ": " << setw(11) << record1.getAt(j) << "\n";
+						newLineTracker++;
+					}
 				}
 			}
 
@@ -417,29 +439,102 @@ void printRatingsForCustomer(string userID, Table ratings, Table restInfo) {
 			record1 = tableIterator1.next();
 	}
 
-	// ------------------------------------------------------------------------------
-	/*
-	tableIterator = Table::TableIterator(0, &restInfo);
-	record = tableIterator.get();
-
-	for(int i = 0; i < restInfo.getSize(); i++) {
-	string value = record.getAt(restPlaceIndex);
-
-	if(value == placeID){
-	string restaurantName = record.getAt(nameIndex);
-	cout << "\n Restaurant Name is: " << restaurantName << endl;
-	restInfoPrinted = true;
-	}
-	if(i != (restInfo.getSize() - 1))
-	record = tableIterator.next();
-	}
-	*/
 	if(!restInfoPrinted)
 		throw 401;
 	else
 		cout << '\n';
 }
 
-void printRatingsForRestaurant(std::string resturantName, Table ratings) {
+void printRatingsForRestaurant(std::string restName, Table restInfo, Table ratings) {
+	cout << "\n       -- Rating for restaurantName: " << restName << " --\n";
+
+	bool restInfoPrinted = false;
+	int newLineTracker = 0;
+
+	// Get attribute list from the restaurant table
+	vector<AttributeList> attributeList1 = restInfo.getAttributes();
+	vector<AttributeList> attributeList2 = ratings.getAttributes();
+
+	// ------------------------------------------------------------------------
+	// restInfo
+	// Search where restaurant name attribute is in Table restInfo
+	int nameIndex = 0;
+	while(nameIndex < attributeList1.size()) {
+		if(attributeList1[nameIndex].getName() == "name")
+			break;
+		else
+			++nameIndex;
+	}
+
+	// Search where place ID attribute is in Table restInfo
+	int restPlaceIndex = 0;
+	while(restPlaceIndex < attributeList1.size()) {
+		if(attributeList1[restPlaceIndex].getName() == "placeID")
+			break;
+		else
+			++restPlaceIndex;
+	}
+
+
+	// ratings
+	// Search where userID attribute is in Table ratings
+	int userIdIndex = 0;
+	while(userIdIndex < attributeList2.size()) {
+		if(attributeList2[userIdIndex].getName() == "userID")
+			break;
+		else
+			++userIdIndex;
+	}
+
+	// Search where place ID attribute is in Table ratings
+	int ratingPlaceIndex = 0;
+	while(ratingPlaceIndex < attributeList2.size()) {
+		if(attributeList2[ratingPlaceIndex].getName() == "placeID")
+			break;
+		else
+			++ratingPlaceIndex;
+	}
+
+	// -------------------------------------------------------------------
+
+	// Search place ID for restaurantName
+	string placeID;
+	Table::TableIterator tableIterator = Table::TableIterator(0, &restInfo);
+	Record record = tableIterator.get();
+	for(int i = 0; i < restInfo.getSize(); i++){
+		string value = record.getAt(nameIndex);
+
+		if(value == restName){
+			placeID = record.getAt(restPlaceIndex);
+			cout << "Restaurant ID is " << placeID << endl;
+			break;
+		}
+		if (i != (restInfo.getSize() - 1))
+			record = tableIterator.next();
+	}
+
+	tableIterator = Table::TableIterator(0, &ratings);
+	record = tableIterator.get();
+
+	for(int i = 0; i < ratings.getSize(); i++) {
+		string value = record.getAt(ratingPlaceIndex);
+
+		if(value == placeID){
+			for(int j = 0; j < record.size(); j++){
+				if(attributeList2[j].getName() != "placeID"){
+					if(newLineTracker % 2 == 0) {
+						cout << left << setw(16) << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "    ";
+						newLineTracker++;
+					} else {
+						cout << left << setw(16) << attributeList2[j].getName() << ": " << setw(11) << record.getAt(j) << "\n";
+						newLineTracker++;
+					}
+				}
+			}
+			restInfoPrinted = true;
+		}
+		if(i != (ratings.getSize() - 1))
+			record = tableIterator.next();
+	}
 
 }
