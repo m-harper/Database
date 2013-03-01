@@ -109,6 +109,8 @@ int main() {
 		case 2: // Displays rating info for a customer, Stntax: A <Customer ID> 
 			try {
 
+				cout << "\nPlease wait...";
+
 				input.erase(0,2);
 
 				if (input.length() != 5)
@@ -134,6 +136,8 @@ int main() {
 			break;
 		case 3: // Displays rating infor for a restaurant, Syntax: B <Restaurant Name>
 			try {
+
+				cout << "\nPlease wait...";
 
 				input.erase(0,2);
 

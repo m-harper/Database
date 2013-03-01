@@ -617,7 +617,10 @@ void printRestaurantInfo(std::string restaurantName, Table restInfo, Table restA
 }
 
 void printRatingsForCustomer(string userID, Table ratings, Table restInfo) {
-	cout << "\n       -- Rating for userID: " << userID << " --\n";
+	
+	cout << "\r";
+	cout << "       -- Ratings for userID: " << userID << " --\nPlease wait...";
+	cout << "\r";
 
 	bool restInfoPrinted = false;
 	int newLineTracker = 0;
@@ -676,7 +679,7 @@ void printRatingsForCustomer(string userID, Table ratings, Table restInfo) {
 		string value = record1.getAt(userIdIndex);
 
 		if(value == userID) {
-			cout << "\n *******" << theNumber << "*******\n";
+			cout << "       ***********   " << theNumber << "   ***********\n";
 			placeID = record1.getAt(ratingPlaceIndex);
 			Table::TableIterator tableIterator2 = Table::TableIterator(0, &restInfo);
 			Record record2 = tableIterator2.get();
@@ -686,7 +689,7 @@ void printRatingsForCustomer(string userID, Table ratings, Table restInfo) {
 				if(id == placeID){
 					restaurantName = record2.getAt(nameIndex);
 
-					cout << "Restaurant Name is: " << restaurantName << endl;
+					cout << "Restaurant Name: " << restaurantName << endl;
 					break;
 				}
 				if(k != (restInfo.getSize() - 1))
@@ -708,8 +711,15 @@ void printRatingsForCustomer(string userID, Table ratings, Table restInfo) {
 			restInfoPrinted = true;
 			++theNumber;
 		}
-		if (i != (ratings.getSize() - 1))
+
+		if(i != (ratings.getSize() - 1)) {
 			record1 = tableIterator1.next();
+			cout << "Searching: Ratings (" << i << "/1162)";
+			cout << "\r";
+		} else {
+			// Clear the line.
+			cout << "                                                  ";
+		}
 	}
 
 	if(!restInfoPrinted)
@@ -719,7 +729,10 @@ void printRatingsForCustomer(string userID, Table ratings, Table restInfo) {
 }
 
 void printRatingsForRestaurant(std::string restName, Table restInfo, Table ratings) {
-	cout << "\n       -- Rating for restaurantName: " << restName << " --\n";
+
+	cout << "\r";
+	cout << "       -- Ratings for restaurantName: " << restName << " --\nPlease wait...";
+	cout << "\r";
 
 	bool restInfoPrinted = false;
 	int newLineTracker = 0;
@@ -779,7 +792,7 @@ void printRatingsForRestaurant(std::string restName, Table restInfo, Table ratin
 
 		if(value == restName){
 			placeID = record.getAt(restPlaceIndex);
-			cout << "Restaurant ID is " << placeID << endl;
+			cout << "Restaurant ID: " << placeID << endl;
 			break;
 		}
 		if (i != (restInfo.getSize() - 1))
@@ -806,8 +819,18 @@ void printRatingsForRestaurant(std::string restName, Table restInfo, Table ratin
 			}
 			restInfoPrinted = true;
 		}
-		if(i != (ratings.getSize() - 1))
-			record = tableIterator.next();
-	}
 
+		if(i != (ratings.getSize() - 1)) {
+			record = tableIterator.next();
+			cout << "Searching: Ratings (" << i << "/1162)";
+			cout << "\r";
+		} else {
+			// Clear the line.
+			cout << "                                                  ";
+		}
+	}
+	cout << "\n\n";
+	if (!restInfoPrinted) {
+		throw 401;
+	}
 }
